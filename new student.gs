@@ -1,18 +1,40 @@
+//serves checklist interface
+//url of webapp called with spreadsheet id and list paramters
+// ?ssId=1kNa3-pDtp1W0ZrRzxCK49Uf6hA15HewvjpyPmzub2UQ&list=trip
 
-
-function doGet() {
+function doGet(e) {
   
-  var html = HtmlService
-      .createTemplateFromFile('student dialogue')
-      .evaluate()
-      .setSandboxMode(HtmlService.SandboxMode.IFRAME);
+   var ssId = "";
+  var list = "";
+  
+  //checks for parameters in url to determine which checklist to serve
+  try { var idParam = JSON.stringify(e.parameter.ssId);
+        var listParam = JSON.stringify(e.parameter.list);
+  
+        ssId = JSON.parse(idParam);
+        list = JSON.parse(listParam);
+     
+     } 
+  
+  catch(err) { ssId = "1Tvs5BqsSlfyOBfSvfQPlGiSmkW3DoeoBtshvUV86wF4";
+               list = "new_user"; } //defaults to upper school tv calendar if url has no parameter
+  
+  var userProperties = PropertiesService.getUserProperties();
+      userProperties.setProperties({
+       'ssId': ssId,
+       'list': list
+       });
+  
+  var html = HtmlService.createTemplateFromFile(list);
+      html.ssId = ssId;
+      
  
-  return html;
+  return html.evaluate()
+         .setTitle(list+' checklist')
+         .setFaviconUrl('https://cdn0.iconfinder.com/data/icons/everyday-objects-line-art-1/128/clipboard-128.png')
+         .setSandboxMode(HtmlService.SandboxMode.IFRAME);
 
-//  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-//      .showModalDialog(html, 'Student induction'); 
-  
-  
+
 }
 
 function processForm(formObject) {
@@ -21,16 +43,17 @@ function processForm(formObject) {
   
   var studentName = JSON.parse(JSON.stringify(formObject));
   var sheetName = studentName.firstName + " " + studentName.secondName;
-  var userType = studentName.userType; //column to filter by
+  var userType = studentName.userType; //column to filter by *must correspond to column headings for user type on checklist sheet*
   var responsibility = String.fromCharCode(userType.charCodeAt(0)+1);//gets coloumn letter for column right of usertype
   var yearGroup = studentName.yearGroup;
   var enrollmentDate = studentName.enrollmentDate;
   var start = "Start date: ";
       enrollmentDate = start.concat(enrollmentDate.toString());
+  
+  var userProperties = PropertiesService.getUserProperties();
+  var ssId = userProperties.getProperty('ssId');
  
-  
-  
-  var ss = SpreadsheetApp.openById('1Tvs5BqsSlfyOBfSvfQPlGiSmkW3DoeoBtshvUV86wF4');
+  var ss = SpreadsheetApp.openById(ssId);
   var newSheet = ss.insertSheet(3);
       newSheet.setName(sheetName);
   

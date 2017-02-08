@@ -2,7 +2,10 @@
 
 function archiveStudent(student) {
   
-  var ss = SpreadsheetApp.openById('1Tvs5BqsSlfyOBfSvfQPlGiSmkW3DoeoBtshvUV86wF4');
+  var userProperties = PropertiesService.getUserProperties();
+  var ssId = userProperties.getProperty('ssId');
+  
+  var ss = SpreadsheetApp.openById(ssId);
   var Sheet = ss.getSheetByName(student);
       Sheet.setName('* '+student)
       

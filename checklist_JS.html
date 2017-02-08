@@ -91,9 +91,9 @@ function checklist() {
      var checkBox = $('<td />', { class:'checkboxRow' }).appendTo(row);
      $('<input />', { class:'taskDone', type: 'checkbox', id: id, value: tasks[f][0] }).appendTo(checkBox);
      if (tasks[f][1]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
-     $('<td />', { class:'taskDesc', 'for': id, text: tasks[f][0] }).appendTo(row);
-     $('<td />',{ id: 'username'+f, class:'username', text:tasks[f][1]}).appendTo(row);
-      $('<td />', { class:'taskResp', text: tasks[f][2] }).appendTo(row);
+     $('<td />', { class:'taskDesc', 'for': id, html: tasks[f][0] }).appendTo(row);
+     $('<td />',{ id: 'username'+f, class:'username', html:tasks[f][1]}).appendTo(row);
+      $('<td />', { class:'taskResp', html: tasks[f][2] }).appendTo(row);
      
      }
 
