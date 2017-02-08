@@ -1,0 +1,255 @@
+ 
+   <script>
+   
+   /**
+   * Run initializations on load.
+   */
+ 
+$(function() {
+    
+    studentList();
+
+});
+
+$('#tasks').click(function() { $('#tasks').prop( "disabled", true ); checklist();});
+
+$('#studentList').click(function() { $('#tasks').prop( "disabled", false ); studentList();});
+
+$('#userType').change(function() { $('#newStudentSubmit').prop( "disabled", false );});
+
+function studentList() {
+
+    $('#studentList,#updateResponse,#spinner, #archive_response').hide();
+    $('#page1,#page3').show(1000);
+    $('#page2,#output,#teststudents,#updateResponse').hide();
+    $('#output').empty();
+    $('#newStudentSubmit').prop( "disabled", true );
+    
+
+$('.studentSheet').remove();
+
+google.script.run
+            .withSuccessHandler(function(students) {
+            // Respond to success conditions here.
+           
+              createRadioboxes(students);
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            $('#teststudents').show();
+             $('#teststudents').html(msg);
+          })
+            .findStudents(); 
+
+
+}
+
+
+
+//shows checklist of selected student
+function checklist() {
+
+ $('#page3').hide(1000);
+ $('#output').empty();
+ $('#page1').hide(1000);
+ $('#page2, table').show(1000);
+ $('#studentList').show();
+  
+  var student = $('input[type="radio"]:checked').val();
+    
+   google.script.run
+            .withSuccessHandler(function(tasks) {
+            // Respond to success conditions here.
+           
+              createCheckboxes(tasks);
+              $('#output').show();
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            $('#output').show();
+             $('#output').html(msg);
+          })
+            .tasks(student); 
+  
+ }
+ 
+ function createCheckboxes(tasks) {
+ 
+ $('#studentName').html(tasks[0][0]); //student name
+ $('#yearGroup').html(tasks[0][1]); //year group
+ $('#enrollmentDate').html(tasks[0][2]); //year group
+  
+   var container = $('#output');
+   var taskNumber = tasks.length;
+   var id="";
+
+ for (var f=2; f<taskNumber ; f++) {
+
+  id = 'tasks'+f;
+     $('<tr />',{id: 'row'+f}).appendTo(container);
+     var row = $("#row"+f);
+     var checkBox = $('<td />', { class:'checkboxRow' }).appendTo(row);
+     $('<input />', { class:'taskDone', type: 'checkbox', id: id, value: tasks[f][0] }).appendTo(checkBox);
+     if (tasks[f][1]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
+     $('<td />', { class:'taskDesc', 'for': id, text: tasks[f][0] }).appendTo(row);
+     $('<td />',{ id: 'username'+f, class:'username', text:tasks[f][1]}).appendTo(row);
+      $('<td />', { class:'taskResp', text: tasks[f][2] }).appendTo(row);
+     
+     }
+
+   $('#output').show();
+
+ }
+ 
+ //adds username next to task when checkbox checked , or removes when unchecked
+ 
+$( "#output" ).on( "click", "input.taskDone", function( event ) {
+
+   $('#updateResponse').hide();
+
+ var selector = $(this).parent().nextAll(".username"); //finds username element in line with clicked input
+ 
+ var checkSelected = $(this).prop('checked');
+
+if (checkSelected) { //if task checked add username of active user to end of task desc
+ 
+ google.script.run
+            .withSuccessHandler(function(user) {
+            // Respond to success conditions here.
+           selector.html(user);
+          })
+          .activeUser();
+          
+          }
+          
+ else { selector.empty();   }    //if unchecked, removes username  
+ 
+});
+ 
+// archives student by adding '*' to sheet name
+
+  $('#archive').click(function() {
+  
+  $('#archive').prop( "disabled", true );
+  $('#spinner').show();
+  $('#tasks').prop( "disabled", true );
+  
+  var student = $('#studentName').text();
+  
+  google.script.run
+            .withSuccessHandler(function(success) {
+            
+           $('#spinner').hide(); 
+           $('#archive').prop( "disabled", false );
+           $('#tasks').prop( "disabled", false );
+           studentList();
+              
+            })
+            .archiveStudent(student);
+            
+  });
+ 
+//maps task list and usernames to array and sets as values in appropriate sheet 
+ 
+  $('#update').click(function() {
+  
+  $('#update').prop( "disabled", true );
+  $('#spinner').show();
+  $('#updateResponse').empty();
+  
+ var student = $('#studentName').text();
+ 
+ var tasks = $('input:checkbox').map(function() {
+    return this.value;
+}).get();
+
+ var usernames =[];
+$('.username').each(function(index, obj)
+{
+  usernames.push($(this).text());
+});
+
+$('table').hide(1000);
+
+$('input').remove('.taskDone');
+var tasksHtml = $('table').html();
+
+
+  google.script.run
+            .withSuccessHandler(function(success) {
+            // Respond to success conditions here.
+             $('#update').prop( "disabled", false );
+             $('#spinner').hide();
+             $('#updateResponse').html(success).fadeIn(2000);
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+             $('#update').prop( "disabled", false );
+             $('#spinner').hide();
+             $('#updateResponse').show();
+             $('#updateResponse').html(msg);
+          })
+            .tableToSpreadsheet(student,tasks,usernames,tasksHtml)
+    });
+    
+ $('#search').click(function() { 
+    
+    $('#students').show();
+    $('#students').html('searching....');
+    var searchterm= $("form input:text").val();
+    
+   google.script.run
+            .withSuccessHandler(function(studentsFound) {
+            // Respond to success conditions here.
+            $('#students').show();
+              createRadioboxes(studentsFound);
+             
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            $('#students').show();
+             $('#students').html(msg);
+          })
+            .findStudents(searchterm) 
+  
+ });
+ 
+ //list of sheets of students as radio boxes to select
+ 
+ function createRadioboxes(studentsFound) {    
+  
+   var container = $('#teststudent');
+   var taskNumber = studentsFound.length;
+   
+   for (var f=0; f<taskNumber ; f++) {
+
+     var id = "student"+f;
+     $('<input />', { name: 'student', class:'studentSheet', type: 'radio', id: id, value: studentsFound[f] }).appendTo(container);
+     $('<label />', { class:'studentSheet', 'for': id, text: studentsFound[f] }).appendTo(container);
+     $('<br>', { class:'studentSheet'}).appendTo(container);
+     }
+     
+     $('#teststudents').show();
+   
+     $("#student0").prop('checked', true);
+     }
+     
+         
+  //creates new student and adds to list
+$('#newStudentSubmit').click(function() {  
+            
+            google.script.run
+            .withSuccessHandler(function(response){ studentList(); $('.studentForm').empty(); confirmation(response); })
+            .processForm(this.parentNode)
+            
+            });
+            
+   function confirmation(response) {
+        var div = document.getElementById('newstudent_response');
+        div.innerHTML = response;
+      }
+
+    </script>
+
+
+
