@@ -1,6 +1,7 @@
 //serves checklist interface
 //url of webapp called with spreadsheet id and list paramters
 // ?ssId=1kNa3-pDtp1W0ZrRzxCK49Uf6hA15HewvjpyPmzub2UQ&list=trip
+//list parameter same name at html file name that is served as interface
 
 function doGet(e) {
   
@@ -17,7 +18,7 @@ function doGet(e) {
      } 
   
   catch(err) { ssId = "1Tvs5BqsSlfyOBfSvfQPlGiSmkW3DoeoBtshvUV86wF4";
-               list = "new_user"; } //defaults to upper school tv calendar if url has no parameter
+               list = "new_user"; } //defaults to new user if url has no parameter
   
   var userProperties = PropertiesService.getUserProperties();
       userProperties.setProperties({
@@ -47,7 +48,7 @@ function processForm(formObject) {
   var responsibility = String.fromCharCode(userType.charCodeAt(0)+1);//gets coloumn letter for column right of usertype
   var yearGroup = studentName.yearGroup;
   var enrollmentDate = studentName.enrollmentDate;
-  var start = "Start date: ";
+  var start = "Start / Leaving date: ";
       enrollmentDate = start.concat(enrollmentDate.toString());
   
   var userProperties = PropertiesService.getUserProperties();

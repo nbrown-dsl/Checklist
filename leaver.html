@@ -10,12 +10,12 @@
   <body>
   <div id="app">
   <div id= "header">
-  <h1>Trip checklist protocol</h1>
-  <input class = "action" id ="tasks" type="button" value="View tasks"/>&nbsp;&nbsp;<input id ="studentList" type="button" value="Return to trips"/><br>
+  <h1>IT leavers protocol</h1>
+  <input class = "action" id ="tasks" type="button" value="View tasks"/>&nbsp;&nbsp;<input id ="studentList" type="button" value="Return to students"/><br>
   </div>
   <div class="page" id="page1">
      
-     <div class='header'>Select trip:</div><br>
+     <div class='header'>Select user:</div><br>
      <div id="teststudent"></div>
     <br><br>
     
@@ -23,7 +23,7 @@
     
   <div class="page" id="page2">
   <div id = "page2_header"><br> 
-   <input class = "action" id ="update" type="button" value="Update" title="and send email to those on list"/>&nbsp;&nbsp;<input class = "create" id ="archive" type="button" value="Archive"/>&nbsp;&nbsp;
+   <input class = "action" id ="update" type="button" value="Update" title="and send email to those on list"/>&nbsp;&nbsp;<input class = "create" id ="archive" type="button" value="Archive" title="and send email to those on list"/>&nbsp;&nbsp;
    <span id="updateResponse"></span><span id="spinner"><img src="http://www.m-seals.com/images/small-spinner.gif" ></span>
    
   <br><br>
@@ -42,18 +42,18 @@
   </div>
  
    <div class="newpage" id="page3">
-   <div class='header'>Add new trip:</div><br>
+   <div class='header'>Add new leaver:</div><br>
     <form id="myForm">
-    Subject:&nbsp;<input class="studentForm" name="firstName" type="text" size="20" /><br><br>
-    Destination:&nbsp;<input class="studentForm" name="secondName" type="text" size="20" /><br><br>
-    Category of trip:&nbsp;<select id = "userType" name="userType">&nbsp;
+    First name:&nbsp;<input class="studentForm" name="firstName" type="text" size="20" /><br><br>
+    Second name:&nbsp;<input class="studentForm" name="secondName" type="text" size="20" /><br><br>
+    Category of user:&nbsp;<select id = "userType" name="userType">&nbsp;
   <option>Select...</option>
-  <option value="I">Lower School residential trip</option>
-  <option value="G">Upper School residential trip</option>
-  <option value="E">Lower School day trip</option>
-  <option value="C">Upper School day trip</option>
+  <option value="I">Lower School student</option>
+  <option value="G">Upper School student</option>
+  <option value="E">Lower School staff</option>
+  <option value="C">Upper School staff</option>
    </select><br><br>
-    Youngest year group involved:&nbsp;<select id = "yearGroup" name="yearGroup">&nbsp;
+    Year group:&nbsp;<select id = "yearGroup" name="yearGroup">&nbsp;
   <option>Select...</option>
   <option value="yrK">yrK</option>
   <option value="yrR">yrR</option>
@@ -73,7 +73,7 @@
   
    </select><br><br>
   
-     Trip start date:
+     Leaving date:
   <input type="date" name="enrollmentDate"><br><br>
  
    

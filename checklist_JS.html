@@ -93,7 +93,8 @@ function checklist() {
      if (tasks[f][1]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
      $('<td />', { class:'taskDesc', 'for': id, html: tasks[f][0] }).appendTo(row);
      $('<td />',{ id: 'username'+f, class:'username', html:tasks[f][1]}).appendTo(row);
-      $('<td />', { class:'taskResp', html: tasks[f][2] }).appendTo(row);
+     var usernameResp = $('<td />', { class:'usernameResp' }).appendTo(row);
+     $('<input />', { id: 'taskResps'+f, class:'taskResps', type: 'text', value: tasks[f][2] }).appendTo(usernameResp);
      
      }
 
@@ -169,6 +170,14 @@ $('.username').each(function(index, obj)
   usernames.push($(this).text());
 });
 
+ var responsibility = [];
+$('.taskResps').each(function(index, obj)
+{
+  responsibility.push($(this).val());
+});
+
+
+
 $('table').hide(1000);
 
 $('input').remove('.taskDone');
@@ -189,7 +198,7 @@ var tasksHtml = $('table').html();
              $('#updateResponse').show();
              $('#updateResponse').html(msg);
           })
-            .tableToSpreadsheet(student,tasks,usernames,tasksHtml)
+            .tableToSpreadsheet(student,tasks,usernames,responsibility,tasksHtml)
     });
     
  $('#search').click(function() { 
