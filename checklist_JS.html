@@ -93,7 +93,7 @@ function checklist() {
      if (tasks[f][1]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
      
      var taskdescrip = $('<td />', { class:'taskdescrip' }).appendTo(row);
-     $('<input />', { class:'taskDesc', 'for': id, type: 'text',value: tasks[f][0] }).appendTo(taskdescrip);
+     $('<input />', { class:'taskDesc taskdescriptions', 'for': id, type: 'text',value: tasks[f][0] }).appendTo(taskdescrip);
     
      var usernameResp = $('<td />', { class:'usernameResp' }).appendTo(row);
      $('<input />', { id: 'taskResps'+f, class:'taskResps', type: 'text', value: tasks[f][2] }).appendTo(usernameResp);
@@ -163,9 +163,13 @@ if (checkSelected) { //if task checked add username of active user to end of tas
   
  var student = $('#studentName').text();
  
- var tasks = $('input:checkbox').map(function() {
-    return this.value;
-}).get();
+ 
+
+var tasks =[];
+$('.taskdescriptions').each(function(index, obj)
+{
+  tasks.push($(this).val());
+});
 
  var usernames =[];
 $('.username').each(function(index, obj)
