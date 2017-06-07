@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <base target="_top">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    <?!= include('style'); ?>
+  </head>
+  <body>
+  <div id="app">
+  <div id= "header">
+  <h1>IT leavers protocol</h1>
+  <input class = "action" id ="tasks" type="button" value="View tasks"/>&nbsp;&nbsp;<input id ="studentList" type="button" value="Return to students"/><br>
+  </div>
+  <div class="page" id="page1">
+     
+     <div class='header'>Select user:</div><br>
+     <div id="teststudent"></div>
+    <br><br>
+    
+  </div>
+    
+  <div class="page" id="page2">
+  <div id = "page2_header"><br> 
+   <input class = "action" id ="update" type="button" value="Update" title="and send email to those on list"/>&nbsp;&nbsp;<input class = "create" id ="archive" type="button" value="Archive" title="and send email to those on list"/>&nbsp;&nbsp;
+   <span id="updateResponse"></span><span id="spinner"><img src="http://www.m-seals.com/images/small-spinner.gif" ></span>
+   
+  <br><br>
+   <b><span id="studentName"></span>
+    <br><br>
+    <span id="yearGroup"></span>&nbsp;&nbsp;<span id="enrollmentDate"></span>
+    <br><br>
+    </b>
+   </div>
+   
+    <table>
+    <thead><tr><td class="taskDone">&nbsp;&nbsp;</td><td class="taskDesc">Task</td><td class="taskResp">Completed by</td><td class="taskResp">Responsibility</td></tr></thead>
+    <tbody id="output"></tbody>
+    </table>
+     
+  </div>
+ 
+   <div class="newpage" id="page3">
+   <div class='header'>Add new leaver:</div><br>
+    <form id="myForm">
+    First name:&nbsp;<input class="studentForm" name="firstName" type="text" size="20" /><br><br>
+    Second name:&nbsp;<input class="studentForm" name="secondName" type="text" size="20" /><br><br>
+    Category of user:&nbsp;<select id = "userType" name="userType">&nbsp;
+  <option>Select...</option>
+  <option value="I">Lower School student</option>
+  <option value="G">Upper School student</option>
+  <option value="E">Lower School staff</option>
+  <option value="C">Upper School staff</option>
+   </select><br><br>
+    Year group:&nbsp;<select id = "yearGroup" name="yearGroup">&nbsp;
+  <option>Select...</option>
+  <option value="yrK">yrK</option>
+  <option value="yrR">yrR</option>
+  <option value="yr1">yr1</option>
+  <option value="yr2">yr2</option>
+  <option value="yr3">yr3</option>
+  <option value="yr4">yr4</option>
+  <option value="yr5">yr5</option>
+  <option value="yr6">yr6</option>
+  <option value="M1">M1</option>
+  <option value="M2">M2</option>
+  <option value="M3">M3</option>
+  <option value="M4">M4</option>
+  <option value="M5">M5</option>
+  <option value="D1">D1</option>
+  <option value="D2">D2</option>
+  
+   </select><br><br>
+  
+     Leaving date:
+  <input type="date" name="enrollmentDate"><br><br>
+ 
+   
+   <input class="create" type="button" value="Submit" id="newStudentSubmit" />
+    </form><br>
+   <div class='response' id='newstudent_response'></div>
+   
+      </div>
+   </div>
+ </body>
+</html>
+
+ <?!= HtmlService.createHtmlOutputFromFile('checklist_JS').getContent(); ?> 
