@@ -14,21 +14,46 @@
   
   <body>
   
-  
-  
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <!-- The drawer is always open in large screens. The header is always shown,
+  even in small screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+            mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <!-- Title -->
-      <span class="mdl-layout-title">WORKFLOW <i>induction</i></span>
-      <!-- Add spacer, to align navigation to the right -->
+     <span class="mdl-layout-title">List</span>
       <div class="mdl-layout-spacer"></div>
-      
-       </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+        <label class="mdl-button mdl-js-button mdl-button--icon"
+               for="fixed-header-drawer-exp">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="sample"
+                 id="fixed-header-drawer-exp">
+        </div>
+      </div>
+    </div>
   </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Workflows</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link workflow" id="induction">Arrivals</a>
+      <a class="mdl-navigation__link workflow" >Leavers</a>
+      <a class="mdl-navigation__link workflow" >Trips</a>
+    </nav>
+     
+      
+     
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+  
  
-   <main class="mdl-layout__content">
-   <div class="page-content"><!-- Your content goes here -->
+ 
+ 
+   
+  
    
    <br>
   <button class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id ="tasks">View Tasks</button>&nbsp;&nbsp;
@@ -125,11 +150,10 @@
      <button class="mdl-snackbar__action" type="button"></button>
     </div> 
     
-   </main> 
     
-    </div>
-    
-   
+
+  </main>
+</div>  
  
  </body>
 </html>

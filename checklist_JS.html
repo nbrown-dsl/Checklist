@@ -4,14 +4,10 @@
    /**
    * Run initializations on load.
    */
- 
-$(function() {
-    
-    studentList();
 
-});
+$('#page1, #page2, #page3').hide();
 
-$('#page3').hide();
+ $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
 
 $('#tasks').click(function() { $('#tasks').prop( "disabled", true ); $('.page2button').prop( "disabled", false ); checklist();});
 
@@ -29,6 +25,8 @@ $('#update').click(function() { save() });
 
 $('#search').click(function() { search() });
 
+
+
 //creates new student and adds to list
 $('#newStudentSubmit').click(function() {  
 
@@ -40,6 +38,7 @@ $('#newStudentSubmit').click(function() {
             
             });
 
+$('.workflow').click(function() {  studentList() }); 
 
 function addUser() {
 
@@ -51,9 +50,8 @@ function addUser() {
 
 function studentList() {
 
-    $('#newStudentSubmit, .page2button').prop( "disabled", true );
-    $('#page2').hide();
-    $('#page1').show(1000);
+    $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
+    $('#page2, #page1').hide();
     $('#fabplus').prop( "disabled", false );
    
 google.script.run
@@ -61,7 +59,8 @@ google.script.run
             // Respond to success conditions here.
            
               createRadioboxes(students);
-              $('#listofusers').show(1000);
+              $('#page1').show(1000);
+               $('#tasks').prop( "disabled", false );
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
