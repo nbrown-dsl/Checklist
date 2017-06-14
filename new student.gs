@@ -73,7 +73,7 @@ function processForm(formObject) {
       newSheet.getRange(2, 1, 1, 3).setValues([["Tasks","Completed","Responsibility"]]);
       
    
- return studentName.firstName+' '+studentName.secondName+' created';
+ return studentName.firstName+' '+studentName.secondName+' added to list';
 }
 
 
