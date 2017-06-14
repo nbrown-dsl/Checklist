@@ -61,7 +61,7 @@ function returnHome() {
     $('#newStudentSubmit, .page2button').prop( "disabled", true );
     $('#page2').hide();
     $('#page1').show(1000);
-    $('#fabplus').prop( "disabled", false );
+    $('#fabplus, #tasks').prop( "disabled", false );
 
 }
 
@@ -159,10 +159,9 @@ if (checkSelected) { //if task checked add username of active user to end of tas
   google.script.run
             .withSuccessHandler(function(success) {
             
-          
-           $('.page2button').prop( "disabled", false );
-           studentList();
-              
+           studentList() 
+           confirm(success + " has been archived");
+           returnHome();
             })
             .archiveStudent(student);
             
