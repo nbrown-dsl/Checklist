@@ -1,37 +1,54 @@
 <style>
 
-.header { 
-          font-weight: bold;
-          }
+
+
+
+.demo-list-control {
+  width: 300px;
+}
+
+.demo-list-radio {
+  display: inline;
+}
+
+.page-content { padding-left :20px; }
           
 .username { 
              padding-right:10px;
              color: blue;
              width: 100px;
-             text-align: right;
+             text-align: left;
              
              }
              
-#app { 
-       width: 80%;
-       height: 80%;
-       padding: 25px;
-       border: 15px Gray;
-       margin-left: 20px; 
-       margin-top: 10px;}
+#fabplus {
+
+position: fixed;
+right:60px;
+bottom:40px;
+z-index: 40;
+
+}
+
+#close { position: absolute;
+         right: 10px;
+         top: 10px;
+         }
+             
              
 #studentName { font-size: 14pt; }
 
-#updateResponse { color: red; }
+
 
 thead { background-color: #FFD700 ;
-        font-weight: bold;
+        
           }
 
 .taskDone { width: 40px;
 	 }
 
-.taskDesc { width: 400px; }
+.taskDesc { width: 400px;
+            text-align: left;}
 
 .taskResp { text-align: right;
             width: 100px;
@@ -39,22 +56,18 @@ thead { background-color: #FFD700 ;
             
 .taskResps { text-align: right;
             width: 100px;
-            padding:2px;
-            margin-right: 0px;
-            margin-top: auto;
-            margin-bottom: auto;
-            background: Blue;
             }
 
-#page3 { position: relative;
-         bottom: 0;
-         padding: 10px;
+#page3 { position: fixed;
+         top: 100px;
+         padding: 30px;
+         margin-left: 200px;
+         margin-right: auto;
+         background-color: LightGray;
+         z-index: 40;
+         
 }
 
-#page2_header { position: relative;
-          padding: 10px;
-         top: 0;
-}
 
 #header, #page1 { padding: 10px; }
 

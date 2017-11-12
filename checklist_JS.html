@@ -4,43 +4,81 @@
    /**
    * Run initializations on load.
    */
- 
-$(function() {
-    
-    studentList();
 
-});
+$('#page1, #page2, #page3').hide();
 
-$('#tasks').click(function() { $('#tasks').prop( "disabled", true ); checklist();});
+ $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
 
-$('#studentList').click(function() { $('#tasks').prop( "disabled", false ); studentList();});
+$('#tasks').click(function() { $('#tasks').prop( "disabled", true ); $('.page2button').prop( "disabled", false ); checklist();});
+
+$('#backhome').click(function() { $('#tasks').prop( "disabled", false ); returnHome();});
 
 $('#userType').change(function() { $('#newStudentSubmit').prop( "disabled", false );});
 
-function studentList() {
+$('#fabplus').click(function() { addUser() });
 
-    $('#studentList,#updateResponse,#spinner, #archive_response').hide();
-    $('#page1,#page3').show(1000);
-    $('#page2,#output,#teststudents,#updateResponse').hide();
-    $('#output').empty();
+$('#close').click(function() { $('#page3').hide(500); });
+
+$('#archive').click(function() { archive() });
+
+$('#update').click(function() { save() });
+
+$('#search').click(function() { search() });
+
+
+
+//creates new user and adds to list
+$('#newStudentSubmit').click(function() {  
+
     $('#newStudentSubmit').prop( "disabled", true );
-    
+            
+            google.script.run
+            .withSuccessHandler(function(response){ $('#page3').hide(1000); confirm(response); studentList(); })
+            .processForm(this.parentNode)
+            
+            });
 
-$('.studentSheet').remove();
+//shows relevant list in response to click on protocol choice in sidebar
+$('.workflow').click(function() {  var workflow = $(this).attr('value'); studentList(workflow) }); 
 
+//shows add to list form
+function addUser() {
+ $('.studentForm').empty();
+ $('#page3').show(1000);
+}
+
+// called when protocol type selected from sidebar, passes prtocol type (workflow parameter)
+function studentList(workflow) {
+
+    $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
+    $('#page2, #page1').hide();
+    $('#fabplus').prop( "disabled", false );
+    $('#workflow_type').text(workflow);
+   
 google.script.run
             .withSuccessHandler(function(students) {
             // Respond to success conditions here.
            
               createRadioboxes(students);
+              $('#page1').show(1000);
+              $('#tasks').prop( "disabled", false );
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
-            $('#teststudents').show();
-             $('#teststudents').html(msg);
+            $('#listofusers').show();
+             $('#listofusers').html(msg);
           })
-            .findStudents(); 
+            .findStudents(workflow); 
 
+
+}
+
+function returnHome() {
+
+    $('#newStudentSubmit, .page2button').prop( "disabled", true );
+    $('#page2').hide();
+    $('#page1').show(1000);
+    $('#fabplus, #tasks').prop( "disabled", false );
 
 }
 
@@ -49,12 +87,10 @@ google.script.run
 //shows checklist of selected student
 function checklist() {
 
- $('#page3').hide(1000);
+ $('#page1, #page3').hide(1000);
+ $('#fabplus').prop( "disabled", true );
  $('#output').empty();
- $('#page1').hide(1000);
- $('#page2, table').show(1000);
- $('#studentList').show();
-  
+ 
   var student = $('input[type="radio"]:checked').val();
     
    google.script.run
@@ -62,7 +98,7 @@ function checklist() {
             // Respond to success conditions here.
            
               createCheckboxes(tasks);
-              $('#output').show();
+              $('#page2').show(1000);
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
@@ -91,14 +127,15 @@ function checklist() {
      var checkBox = $('<td />', { class:'checkboxRow' }).appendTo(row);
      $('<input />', { class:'taskDone', type: 'checkbox', id: id, value: tasks[f][0] }).appendTo(checkBox);
      if (tasks[f][1]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
-     $('<td />', { class:'taskDesc', 'for': id, html: tasks[f][0] }).appendTo(row);
-     $('<td />',{ id: 'username'+f, class:'username', html:tasks[f][1]}).appendTo(row);
+     
+     var taskdescrip = $('<td />', { class:'taskdescrip' }).appendTo(row);
+     $('<input />', { class:'taskDesc taskdescriptions', 'for': id, type: 'text',value: tasks[f][0] }).appendTo(taskdescrip);
+    
      var usernameResp = $('<td />', { class:'usernameResp' }).appendTo(row);
      $('<input />', { id: 'taskResps'+f, class:'taskResps', type: 'text', value: tasks[f][2] }).appendTo(usernameResp);
      
+     $('<td />',{ id: 'username'+f, class:'username', html:tasks[f][1]}).appendTo(row);
      }
-
-   $('#output').show();
 
  }
  
@@ -106,7 +143,7 @@ function checklist() {
  
 $( "#output" ).on( "click", "input.taskDone", function( event ) {
 
-   $('#updateResponse').hide();
+   
 
  var selector = $(this).parent().nextAll(".username"); //finds username element in line with clicked input
  
@@ -118,6 +155,9 @@ if (checkSelected) { //if task checked add username of active user to end of tas
             .withSuccessHandler(function(user) {
             // Respond to success conditions here.
            selector.html(user);
+           // call save function every time change to list (but what about editting description? 
+           // have email list as separate function called by 'email' button
+           // save();
           })
           .activeUser();
           
@@ -129,40 +169,40 @@ if (checkSelected) { //if task checked add username of active user to end of tas
  
 // archives student by adding '*' to sheet name
 
-  $('#archive').click(function() {
+  function archive() {
   
-  $('#archive').prop( "disabled", true );
-  $('#spinner').show();
-  $('#tasks').prop( "disabled", true );
+  $('#archive, #tasks').prop( "disabled", true );
+  
   
   var student = $('#studentName').text();
   
   google.script.run
             .withSuccessHandler(function(success) {
             
-           $('#spinner').hide(); 
-           $('#archive').prop( "disabled", false );
-           $('#tasks').prop( "disabled", false );
-           studentList();
-              
+           studentList() 
+           confirm(success + " has been archived");
+           returnHome();
             })
             .archiveStudent(student);
             
-  });
+  }
  
 //maps task list and usernames to array and sets as values in appropriate sheet 
  
-  $('#update').click(function() {
+  function save() {
   
   $('#update').prop( "disabled", true );
-  $('#spinner').show();
-  $('#updateResponse').empty();
+  
   
  var student = $('#studentName').text();
  
- var tasks = $('input:checkbox').map(function() {
-    return this.value;
-}).get();
+ 
+
+var tasks =[];
+$('.taskdescriptions').each(function(index, obj)
+{
+  tasks.push($(this).val());
+});
 
  var usernames =[];
 $('.username').each(function(index, obj)
@@ -177,9 +217,6 @@ $('.taskResps').each(function(index, obj)
 });
 
 
-
-$('table').hide(1000);
-
 $('input').remove('.taskDone');
 var tasksHtml = $('table').html();
 
@@ -189,7 +226,7 @@ var tasksHtml = $('table').html();
             // Respond to success conditions here.
              $('#update').prop( "disabled", false );
              $('#spinner').hide();
-             $('#updateResponse').html(success).fadeIn(2000);
+             confirm(success);
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
@@ -199,9 +236,10 @@ var tasksHtml = $('table').html();
              $('#updateResponse').html(msg);
           })
             .tableToSpreadsheet(student,tasks,usernames,responsibility,tasksHtml)
-    });
-    
- $('#search').click(function() { 
+    }
+ 
+ 
+ function search() { 
     
     $('#students').show();
     $('#students').html('searching....');
@@ -221,41 +259,45 @@ var tasksHtml = $('table').html();
           })
             .findStudents(searchterm) 
   
- });
+ }
  
  //list of sheets of students as radio boxes to select
  
- function createRadioboxes(studentsFound) {    
-  
-   var container = $('#teststudent');
+ function createRadioboxes(studentsFound) {  
+ 
+   $('.item-on-list').remove();
+   var container = $('#listofusers');
    var taskNumber = studentsFound.length;
    
    for (var f=0; f<taskNumber ; f++) {
 
      var id = "student"+f;
-     $('<input />', { name: 'student', class:'studentSheet', type: 'radio', id: id, value: studentsFound[f] }).appendTo(container);
-     $('<label />', { class:'studentSheet', 'for': id, text: studentsFound[f] }).appendTo(container);
-     $('<br>', { class:'studentSheet'}).appendTo(container);
+    
+     
+     $('#user-on-list').clone().appendTo(container).attr( { 'id':id, 'class': 'item-on-list'});
+     $('#'+id+' .user-name').text(studentsFound[f]);
+     $('#'+id+' input').attr({ id:id , value: studentsFound[f] });
+     $('#'+id+' label').attr('for',id);
+     $('.item-on-list').show();
+    
      }
      
-     $('#teststudents').show();
-   
-     $("#student0").prop('checked', true);
+      $('#user-on-list').hide();
+      
+    
      }
+                 
      
-         
-  //creates new student and adds to list
-$('#newStudentSubmit').click(function() {  
-            
-            google.script.run
-            .withSuccessHandler(function(response){ studentList(); $('.studentForm').empty(); confirmation(response); })
-            .processForm(this.parentNode)
-            
-            });
-            
-   function confirmation(response) {
-        var div = document.getElementById('newstudent_response');
-        div.innerHTML = response;
+ //snackbar confirmation     
+      
+      function confirm(response) {
+      
+       'use strict';
+  window['counter'] = 0;
+  
+    var snackbarContainer = document.querySelector('#demo-toast-example');
+    var data = {message: response };
+    snackbarContainer.MaterialSnackbar.showSnackbar(data);
       }
 
     </script>
