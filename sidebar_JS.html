@@ -1,0 +1,21 @@
+<script>
+
+google.script.run
+            .withSuccessHandler(function(url) {
+            // Respond to success conditions here.
+             $("#url").attr("href", url)
+              
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+          
+             $('#url').html(msg);
+          })
+            .appUrl(); 
+
+
+
+
+
+</script>
+

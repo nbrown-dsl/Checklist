@@ -14,22 +14,44 @@
   
   <body>
   
-  
-  
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <!-- The drawer is always open in large screens. The header is always shown,
+  even in small screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+            mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <!-- Title -->
-      <span class="mdl-layout-title">Induction protocol</span>
-      <!-- Add spacer, to align navigation to the right -->
+     <span class="mdl-layout-title"></span>
       <div class="mdl-layout-spacer"></div>
-      
-       </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
+                  mdl-textfield--floating-label mdl-textfield--align-right">
+        <label class="mdl-button mdl-js-button mdl-button--icon"
+               for="fixed-header-drawer-exp">
+          <i class="material-icons">search</i>
+        </label>
+        <div class="mdl-textfield__expandable-holder">
+          <input class="mdl-textfield__input" type="text" name="sample"
+                 id="fixed-header-drawer-exp">
+        </div>
+      </div>
+    </div>
   </header>
  
-   <main class="mdl-layout__content">
-   <div class="page-content"><!-- Your content goes here -->
-   
+<!-- Sidebar with choice of protocols --> 
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Protocols</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link workflow" value="arrival"><i class="material-icons">flight_land</i>&nbsp;&nbsp;Arrivals</a>
+      <a class="mdl-navigation__link workflow" value="leaver"><i class="material-icons">flight_takeoff</i>&nbsp;&nbsp;Leavers</a>
+      <a class="mdl-navigation__link workflow" value="trip"><i class="material-icons">airport_shuttle</i>&nbsp;&nbsp;Trips</a>
+    </nav>
+     
+      
+     
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+  
+ 
    <br>
   <button class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent" id ="tasks">View Tasks</button>&nbsp;&nbsp;
   <button id ="backhome" class="page2button mdl-button mdl-js-button mdl-button--raised"> <i class="material-icons">arrow_back</i></button>&nbsp;&nbsp;
@@ -47,7 +69,7 @@
   
   <div class="page" id="page1">
   
-    <div class='header'><h5>Select user:</h5></div>
+    <div class='header'><h5>Select <span id="workflow_type"></span></h5></div>
      <form id="listofusers" class="user-list-item">
       <div  id="user-on-list">
         <input type="radio" id="list-option-1" name="username"/>&nbsp;&nbsp;<span class="user-name">List</span>
@@ -55,11 +77,11 @@
      </form>
      
   </div>
-    
-  <div class="page" id="page2">
-  
- 
-  
+
+
+
+<!-- task list -->
+  <div class="page" id="page2"> 
      <br>
      <h5><span id="studentName"></span></h5>
      <h6><span id="yearGroup"></span>&nbsp;&nbsp;<span id="enrollmentDate"></span></h6> 
@@ -69,12 +91,19 @@
      </table>
     
   </div>
- 
+  
+  
+<!-- adding new student or leaver form -->
    <div class="page" id="page3">
+   
+    <form id="workflowForm">
+   
+     <input class="create" type="button" value="Submit" id="submitNewWorkflowButton" />
+    </form>
    
   <button id ="close" class="mdl-button mdl-js-button mdl-button--icon"> <i class="material-icons">close</i></button>
    
-  <h5>Add new user:</h5>
+  <h5>Add user to list:</h5>
     <form id="myForm">
     First name:&nbsp;<input class="studentForm" name="firstName" type="text" size="20" /><br><br>
     Second name:&nbsp;<input class="studentForm" name="secondName" type="text" size="20" /><br><br>
@@ -125,11 +154,10 @@
      <button class="mdl-snackbar__action" type="button"></button>
     </div> 
     
-   </main> 
     
-    </div>
-    
-   
+
+  </main>
+</div>  
  
  </body>
 </html>

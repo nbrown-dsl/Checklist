@@ -4,14 +4,11 @@
    /**
    * Run initializations on load.
    */
- 
-$(function() {
-    
-    studentList();
+           
 
-});
+$('#page1, #page2, #page3, #workflowForm').hide();
 
-$('#page3').hide();
+ $('.page2button ,#tasks, #fabplus' ).prop( "disabled", true );
 
 $('#tasks').click(function() { $('#tasks').prop( "disabled", true ); $('.page2button').prop( "disabled", false ); checklist();});
 
@@ -23,35 +20,84 @@ $('#fabplus').click(function() { addUser() });
 
 $('#close').click(function() { $('#page3').hide(500); });
 
+$('#archive').click(function() { archive() });
 
+$('#update').click(function() { save() });
+
+$('#search').click(function() { search() });
+
+
+
+//creates new user and adds to list
+$('#newStudentSubmit').click(function() {  
+
+    $('#newStudentSubmit').prop( "disabled", true );
+            
+            google.script.run
+            .withSuccessHandler(function(response){ $('#page3').hide(1000); confirm(response); studentList(); })
+            .processForm(this.parentNode)
+            
+            });
+
+//shows relevant list in response to click on protocol choice in sidebar
+$('.workflow').click(function() {  var workflow = $(this).attr('value'); studentList(workflow) }); 
+
+//shows add to list form
 function addUser() {
 
- $('.studentForm').empty();
- $('#page3').show(1000);
+google.script.run
+            .withSuccessHandler(function(formData) {
+            
+            console.log(formData);
+            // Respond to success conditions here.
+           //generates form form workflow spreadsheet header data
+//     for (var h=0; h<formData.length; h++) {
+//     
+//              $('#workflowForm').append('<p class="inputDesc">'+formData[h].description+'</p>' );
+//  
+//            for (var i=0; i<formData[h].dataList.length; i++) {
+//              $('#workflowForm').append('<input name='+formData[h].id+' type='+formData[h].dataType+'>'+formData[h].dataList[i]+'<br>');
+//              }
+//             $('#workflowForm').append('<br>'); 
+             
+//             }
+             $('.studentForm').empty();
+             $('#page3').show(1000);
+              
+            
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            $('#workflowForm').html(msg);
+            $('#page3').show(1000);
+           
+          })
+            .getFormData(); 
 
 }
 
+// called when protocol type selected from sidebar, passes prtocol type (workflow parameter)
+function studentList(workflow) {
 
-function studentList() {
-
-    $('#newStudentSubmit, .page2button').prop( "disabled", true );
-    $('#page2').hide();
-    $('#page1').show(1000);
+    $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
+    $('#page2, #page1').hide();
     $('#fabplus').prop( "disabled", false );
+    $('#workflow_type').text(workflow);
    
 google.script.run
             .withSuccessHandler(function(students) {
             // Respond to success conditions here.
            
               createRadioboxes(students);
-              $('#listofusers').show(1000);
+              $('#page1').show(1000);
+              $('#tasks').prop( "disabled", false );
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
             $('#listofusers').show();
              $('#listofusers').html(msg);
           })
-            .findStudents(); 
+            .findStudents(workflow); 
 
 
 }
@@ -138,6 +184,9 @@ if (checkSelected) { //if task checked add username of active user to end of tas
             .withSuccessHandler(function(user) {
             // Respond to success conditions here.
            selector.html(user);
+           // call save function every time change to list (but what about editting description? 
+           // have email list as separate function called by 'email' button
+           // save();
           })
           .activeUser();
           
@@ -149,7 +198,7 @@ if (checkSelected) { //if task checked add username of active user to end of tas
  
 // archives student by adding '*' to sheet name
 
-  $('#archive').click(function() {
+  function archive() {
   
   $('#archive, #tasks').prop( "disabled", true );
   
@@ -165,11 +214,11 @@ if (checkSelected) { //if task checked add username of active user to end of tas
             })
             .archiveStudent(student);
             
-  });
+  }
  
 //maps task list and usernames to array and sets as values in appropriate sheet 
  
-  $('#update').click(function() {
+  function save() {
   
   $('#update').prop( "disabled", true );
   
@@ -216,9 +265,10 @@ var tasksHtml = $('table').html();
              $('#updateResponse').html(msg);
           })
             .tableToSpreadsheet(student,tasks,usernames,responsibility,tasksHtml)
-    });
-    
- $('#search').click(function() { 
+    }
+ 
+ 
+ function search() { 
     
     $('#students').show();
     $('#students').html('searching....');
@@ -238,12 +288,13 @@ var tasksHtml = $('table').html();
           })
             .findStudents(searchterm) 
   
- });
+ }
  
  //list of sheets of students as radio boxes to select
  
- function createRadioboxes(studentsFound) {    
-  
+ function createRadioboxes(studentsFound) {  
+ 
+   $('.item-on-list').remove();
    var container = $('#listofusers');
    var taskNumber = studentsFound.length;
    
@@ -252,29 +303,19 @@ var tasksHtml = $('table').html();
      var id = "student"+f;
     
      
-     $('#user-on-list').clone().appendTo(container).attr('id',id);
+     $('#user-on-list').clone().appendTo(container).attr( { 'id':id, 'class': 'item-on-list'});
      $('#'+id+' .user-name').text(studentsFound[f]);
      $('#'+id+' input').attr({ id:id , value: studentsFound[f] });
      $('#'+id+' label').attr('for',id);
+     $('.item-on-list').show();
     
      }
      
       $('#user-on-list').hide();
+      
     
      }
-     
-         
-  //creates new student and adds to list
-$('#newStudentSubmit').click(function() {  
-
-    $('#newStudentSubmit').prop( "disabled", true );
-            
-            google.script.run
-            .withSuccessHandler(function(response){ $('#page3').hide(1000); confirm(response); studentList(); })
-            .processForm(this.parentNode)
-            
-            });
-            
+                 
      
  //snackbar confirmation     
       
