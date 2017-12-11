@@ -20,6 +20,9 @@ function showWorkflowForm() {
   
   html.data = taskSheets;
   html = html.evaluate();
+  html.setWidth(800);
+  html.setHeight(500);
+  
   
   SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
       .showModalDialog(html, 'Workflow form');
