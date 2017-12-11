@@ -4,10 +4,11 @@
    /**
    * Run initializations on load.
    */
+           
 
-$('#page1, #page2, #page3').hide();
+$('#page1, #page2, #page3, #workflowForm').hide();
 
- $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
+ $('.page2button ,#tasks, #fabplus' ).prop( "disabled", true );
 
 $('#tasks').click(function() { $('#tasks').prop( "disabled", true ); $('.page2button').prop( "disabled", false ); checklist();});
 
@@ -43,8 +44,36 @@ $('.workflow').click(function() {  var workflow = $(this).attr('value'); student
 
 //shows add to list form
 function addUser() {
- $('.studentForm').empty();
- $('#page3').show(1000);
+
+google.script.run
+            .withSuccessHandler(function(formData) {
+            
+            console.log(formData);
+            // Respond to success conditions here.
+           //generates form form workflow spreadsheet header data
+//     for (var h=0; h<formData.length; h++) {
+//     
+//              $('#workflowForm').append('<p class="inputDesc">'+formData[h].description+'</p>' );
+//  
+//            for (var i=0; i<formData[h].dataList.length; i++) {
+//              $('#workflowForm').append('<input name='+formData[h].id+' type='+formData[h].dataType+'>'+formData[h].dataList[i]+'<br>');
+//              }
+//             $('#workflowForm').append('<br>'); 
+             
+//             }
+             $('.studentForm').empty();
+             $('#page3').show(1000);
+              
+            
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            $('#workflowForm').html(msg);
+            $('#page3').show(1000);
+           
+          })
+            .getFormData(); 
+
 }
 
 // called when protocol type selected from sidebar, passes prtocol type (workflow parameter)

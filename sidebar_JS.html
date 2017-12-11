@@ -1,0 +1,49 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ 
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+<script>
+
+google.script.run
+            .withSuccessHandler(function(url) {
+            // Respond to success conditions here.
+             $("#url").attr("href", url.toString())
+             
+             console.log(url);
+              
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+          
+             $('#url').html(msg);
+          })
+            .appUrl(); 
+
+$('#newWorkflow').click(function() {
+
+google.script.run
+            .withSuccessHandler(function() {
+            // Respond to success conditions here.
+            
+             
+             console.log('hello');
+              
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+          
+              console.log('goodbye');
+          })
+            .showWorkflowForm(); 
+
+
+
+});
+
+
+
+</script>
+
