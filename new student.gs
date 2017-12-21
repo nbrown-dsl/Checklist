@@ -71,10 +71,30 @@ function processForm(formObject) {
       newSheet.getRange("C1").setValue(enrollmentDate);  //not string so messes up return values for listing tasks in UI
       newSheet.setColumnWidth(1, 500);
       newSheet.getRange(2, 1, 1, 3).setValues([["Tasks","Completed","Responsibility"]]);
+  
+  
+var maxRows = newSheet.getMaxRows(); 
+var lastRow = newSheet.getLastRow();
+if (maxRows-lastRow != 0){
+      newSheet.deleteRows(lastRow+1, maxRows-lastRow);
+      }
+  
       
    
- return studentName.firstName+' '+studentName.secondName+' created';
+ return studentName.firstName+' '+studentName.secondName+' added to list';
 }
+
+//get username
+function activeUser() {
+  
+  var eMail = Session.getActiveUser().getEmail();
+  var userName = eMail.split("@");
+  
+  return userName[0];
+  
+  
+}
+
 
 
 

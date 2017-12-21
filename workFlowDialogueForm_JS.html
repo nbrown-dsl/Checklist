@@ -1,0 +1,40 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ 
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+<script>
+
+$('.workflowEntry').hide();
+
+$('#addEntry').click(function() {
+
+ $('#addEntry').prop('disabled',true);
+   
+   $('.workflowEntry').clone().appendTo('#workflowForm').fadeIn(1000).prop('class','workflowEntry');;
+
+
+});
+
+//passes new / edited workflow form to docproperties and updates sidebar
+$('#workflowForm_submit').click(function() {  
+
+    $('#workflowForm_submit').prop( "disabled", true );
+            
+            google.script.run
+            .withSuccessHandler(function(response){ 
+            
+           console.log(response); 
+           
+           })
+            .processworkflowForm(this.parentNode)
+            
+            });
+
+
+</script>
+
+
+

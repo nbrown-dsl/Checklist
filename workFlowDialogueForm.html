@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   
+    <base target="_top">
+   
+     <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <base target="_top">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-orange.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+ <?!= include('workFlowDialogueForm_style') ?>
+  </head>
+  <body>
+   <h3><?!= values ?></h3>
+   
+  
+   
+    <div id="workflowFormEntry">
+    
+    
+    <form id="workflowForm" >
+    
+     <input class="create" type="button" value="Submit" id="workflowForm_submit" />
+     
+    <input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
+    
+    <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">
+     <option id="firstTaskOption" value="doNotSelect"  selected>Select sheet of tasks</option>
+      <? for (var i = 0; i < data.length; i++) { ?>
+            <option value='<?= data[i]?>'><?= data[i]?></option>
+      <? } ?>
+     </select><br><br>
+     
+     <button id ="addEntry" class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add entry</button><br><br>
+    
+     
+     
+     <div class="flex-container workflowEntry">
+  
+        <input class="flex-child mdl-textfield__input" type="text" size="20" name= "entry_description" /><br>
+       
+         <div class=" flex-child mdl-selectfield mdl-js-selectfield">
+              <select class="mdl-selectfield__select" name="data_type">
+               <option value="doNotSelect" selected>Select data type...</option>
+               <option value="text" >Text</option>
+               <option value="datetime-local">Date</option>
+               <option value="radio">Multiple choice</option>
+               <option value="checkbox">Checkboxes</option>
+             </select>
+         </div><br>
+        
+      </div>
+      
+    </form>
+    
+   
+    </div>
+    
+
+  <?!= include('workFlowDialogueForm_JS'); ?>   
+  </body>
+</html>
+
+
+
+
+

@@ -1,0 +1,80 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+ 
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+
+<script>
+
+//gets doc properties for workflow list
+$ ( document ).ready(function() { workflowlist(); webAppUrl() });
+$('#refresh').click(function() { workflowlist() });
+
+//appends list of workflows from doc properties keys
+function workflowlist() {
+ google.script.run
+            .withSuccessHandler(function(list){ 
+            
+            $('#workflowList').hide(1000).empty();
+            
+            for (var l=0; l<list.length; l++) {
+            $('<p />', { value:list[l], text:list[l] }).appendTo('#workflowList');
+            $('#workflowList').append('<a class="workflowEdit" value="'+list[l]+'"><i class="material-icons">mode_edit</i></a>');
+            }; 
+             $('#workflowList').show(1000)
+           })
+           .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+             $('#workflowList').html(msg);
+          })
+            .listOfWorkFlows();
+            
+            }
+
+//provides link to published web app UI for user to paste
+function webAppUrl() {
+google.script.run
+            .withSuccessHandler(function(url) {
+            // Respond to success conditions here.
+             $("#url").attr("href", url.toString())
+             
+             console.log(url);
+              
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+          
+             $('#url').html(msg);
+          })
+            .appUrlandWorkflows(); 
+ }           
+            
+//opens workflow setup dialogue and passes workflow name            
+
+$('#newWorkflow, .workflowEdit').click(function() {
+
+var workflow_Name = $(this).attr('value');
+
+google.script.run 
+          .withSuccessHandler(function(success) {
+            // Respond to success conditions here
+             
+             console.log('server call successful');
+              
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+          
+             $('#error').html(msg);
+          })
+            .showWorkflowForm(workflow_Name); 
+
+
+
+});
+
+
+
+</script>
+
