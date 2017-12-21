@@ -1,0 +1,59 @@
+<script>
+
+$('.newWorkflowdialoguePage').hide();
+$('#workflowdialogue_page1_type').show().addClass('current');
+
+    var dialog = document.querySelector('dialog');
+    var showModalButton = document.querySelector('.show-modal');
+    if (! dialog.showModal) {
+      dialogPolyfill.registerDialog(dialog);
+    }
+    showModalButton.addEventListener('click', function() {
+      dialog.showModal();
+    });
+    dialog.querySelector('.close').addEventListener('click', function() {
+      dialog.close();
+    });
+    dialog.querySelector('.next').addEventListener('click', function() {
+              $('.current').hide().removeClass('current').next().show(500).addClass('current');
+              $('.back').prop( "disabled", false );
+              if ( $('.current').hasClass("lastPage")) { $('.next').prop( "disabled", true );    }
+             
+    });
+    dialog.querySelector('.back').addEventListener('click', function() {
+              $('.current').hide().removeClass('current').prev().show(500).addClass('current');
+              $('.next').prop( "disabled", false );
+              if ( $('.current').hasClass("firstPage")) { $('.back').prop( "disabled", true );    }
+    });
+    
+    workflowlist();
+    
+    //appends list of workflows from doc properties keys
+function workflowlist() {
+ google.script.run
+            .withSuccessHandler(function(list){ 
+            
+            $('#workflowList').hide(1000).empty();
+            
+            for (var l=0; l<list.length; l++) {
+            $('<option />', { value:list[l], text:list[l] }).appendTo('#workflowList');
+            //$('#workflowList').append('<a class="workflowEdit" value="'+list[l]+'"><i class="material-icons">mode_edit</i></a>');
+            }; 
+             $('<option />', { value:'new', text:'New type of workflow' }).appendTo('#workflowList');
+             $('#workflowList').show(1000)
+           })
+           .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+             $('#workflowList').html(msg);
+          })
+            .listOfWorkFlows();
+            
+            }
+    
+    
+    
+    
+    
+    
+  </script>
+

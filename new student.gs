@@ -4,38 +4,13 @@
 //list parameter same name at html file name that is served as interface
 
 function doGet(e) {
-  
-   var ssId = "";
-  var list = "";
-  
-  //checks for parameters in url to determine which checklist to serve
-  try { var idParam = JSON.stringify(e.parameter.ssId);
-        var listParam = JSON.stringify(e.parameter.list);
-  
-        ssId = JSON.parse(idParam);
-        list = JSON.parse(listParam);
-     
-     } 
-  
-  catch(err) { ssId = "1Tvs5BqsSlfyOBfSvfQPlGiSmkW3DoeoBtshvUV86wF4";
-               list = "new_user"; } //defaults to new user if url has no parameter
-  
-  var userProperties = PropertiesService.getUserProperties();
-      userProperties.setProperties({
-       'ssId': ssId,
-       'list': list
-       });
-  
-  var html = HtmlService.createTemplateFromFile(list);
-      html.ssId = ssId;
-      
- 
+    
+  var html = HtmlService.createTemplateFromFile('workflowUI');
+       
   return html.evaluate()
-         .setTitle(list+' checklist')
+         .setTitle('Workflows')
          .setFaviconUrl('https://cdn0.iconfinder.com/data/icons/everyday-objects-line-art-1/128/clipboard-128.png')
          .setSandboxMode(HtmlService.SandboxMode.IFRAME);
-
-
 }
 
 function processForm(formObject) {
@@ -109,43 +84,14 @@ function findStudent(sheetName) {
   
   return taskhtml;
 
-//  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-//      .showModalDialog(html, 'checklist'); 
   
  
 }
 
-function debug() {
-  
-   Logger.log(HtmlService
-      .createTemplateFromFile('student dialogue')
-      .getCode());
-  
-  
-  
-  
-}
 
 function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename)
       .getContent();
 }
 
-function testViz() {
-  
-  var html = HtmlService
-      .createTemplateFromFile('test viz')
-      .evaluate()
-      .setSandboxMode(HtmlService.SandboxMode.IFRAME);
- 
-  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-      .showModalDialog(html, 'test viz'); 
 
-  var htmlMail = html.getContent();
-  
-  Logger.log(htmlMail);
-  
-  return htmlMail;
-
-  
-}
