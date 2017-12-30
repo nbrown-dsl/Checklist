@@ -1,14 +1,20 @@
 <script>
 
-$('.newWorkflowdialoguePage').hide();
-$('#workflowdialogue_page1_type').show().addClass('current');
-
     var dialog = document.querySelector('dialog');
     var showModalButton = document.querySelector('.show-modal');
     if (! dialog.showModal) {
       dialogPolyfill.registerDialog(dialog);
     }
+    
+    $('.workflowEntry').hide();
+    
+    
     showModalButton.addEventListener('click', function() {
+    $('.newWorkflowdialoguePage').hide().removeClass('current');
+    $('#workflowdialogue_page1_type').show().addClass('current');
+    $('.back').prop( "disabled", true );
+    $('.next, .createWorkFlow').prop( "disabled", false );
+    
       dialog.showModal();
     });
     dialog.querySelector('.close').addEventListener('click', function() {
@@ -18,13 +24,63 @@ $('#workflowdialogue_page1_type').show().addClass('current');
               $('.current').hide().removeClass('current').next().show(500).addClass('current');
               $('.back').prop( "disabled", false );
               if ( $('.current').hasClass("lastPage")) { $('.next').prop( "disabled", true );    }
+              
+              updateWorkflowSelected()
              
     });
+    
+    
+    //sets document properties from new workflow form fields
+    
+     dialog.querySelector('.createWorkFlow').addEventListener('click', function() {
+     
+      $('.createWorkFlow').prop( "disabled", false );
+     
+    var unindexed_array = $('.new_form').serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    console.log( indexed_array);
+
+                google.script.run
+            .withSuccessHandler(function(response){ 
+            
+           console.log(response); 
+            dialog.close(1000);
+            confirm(response +" workflow created");
+           
+           })
+           .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            console.log(msg);
+          })
+            .processworkflowForm(indexed_array)
+            
+            
+    });
+    
     dialog.querySelector('.back').addEventListener('click', function() {
               $('.current').hide().removeClass('current').prev().show(500).addClass('current');
               $('.next').prop( "disabled", false );
               if ( $('.current').hasClass("firstPage")) { $('.back').prop( "disabled", true );    }
+              
+              updateWorkflowSelected()
     });
+    dialog.querySelector('#addEntry').addEventListener('click', function() {
+              addEntry();
+    });
+
+    
+    
+    //     dialog.querySelector('#workflowList').addEventListener('change', function() {
+//              updateWorkflowSelected();
+//    });
+//  
+    
+    
     
     workflowlist();
     
@@ -50,10 +106,25 @@ function workflowlist() {
             
             }
     
+ function addEntry() {
+
+   $('.workflowEntry:first').clone().appendTo('#workflowFormDialogueEdit').fadeIn(1000);
+
+}
+
+
+//presents form according to workflow selection on first page
+function updateWorkflowSelected() {
+
+var str = "Form for ";
+    $( "#workflowList option:selected" ).each(function() {
+      str += $( this ).text() + " ";
+    });
     
-    
-    
-    
+    $( "#workflowFormName" ).text( str );
+  }
+
+
     
   </script>
 

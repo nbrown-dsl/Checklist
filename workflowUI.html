@@ -16,7 +16,7 @@
   <body>
   
    <button class="mdl-button mdl-js-button mdl-button--fab mdl-button show-modal" id="newWorkflow" value="newWorkflow">
-  <i class="material-icons">build</i>
+  <i class="material-icons">settings</i>
   </button>
   <div class="mdl-tooltip" for="fabplus">New workflow</div>
   
@@ -165,32 +165,65 @@
   </main>
 </div>  
 
-//new workflow dialogue
+
 <dialog class="mdl-dialog" id="newWorkflowdialogue">
   <div class="mdl-dialog__title">Create workflow</div>
     <div class="mdl-dialog__content">
+    
+    <i type="button" class="close material-icons">close</i>
       
       <div class = "newWorkflowdialoguePage firstPage" id = "workflowdialogue_page1_type">
          <h5>Choose type of workflow</h5>
            <select id="workflowList">
+           <option>arrivals</option>
            </select>
       </div>
        
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page2_form">
-         <h5>Complete workflow form</h5>
+         <h5 id="workflowFormName"></h5>
+          <form id="myForm">
+   
+ 
+   
+   <input class="create" type="button" value="Submit" id="newStudentSubmit" />
+    </form>
      </div>
      
-     <div class = "newWorkflowdialoguePage lastPage" id = "workflowdialogue_page3_tasks">
+     <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page3_Newform">
+        
+          <form id="workflowFormDialogueEdit" class="new_form"> 
+           <label>Workflow name</label><input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
+           
+            <p class="instructions">For Options fields, enter 'Text' for text, 'Date' for date, comma separated list for checkboxes and @ separated list for radio buttons</p><br> 
+                <div class = "workflowEntry">
+                  <label>Description</label><input class="mdl-textfield__input" type="text" size="40" name= "entry_description" />
+                  <label>Options</label><input class="mdl-textfield__input" type="text" size="40" name= "entry_options" /><br>
+                </div>
+                
+               
+         </form>
+         <button id ="addEntry" class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add entry</button> 
+     </div>
+     
+     <div class = "newWorkflowdialoguePage lastPage" id = "workflowdialogue_page4_tasks">
          <h5>Workflows tasks and responsibilities</h5>
+        <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities fo rthis workflow</p> 
+         <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">
+              <option value='staff'>Staff</option>
+              <option value='students'>Students</option>
+           </select><br><br>
      </div>
    
     </div>
     <div class="mdl-dialog__actions mdl-dialog__actions--full-width navBar">
      <button type="button" class="mdl-button back">Back</button>
       <button type="button" class="mdl-button next">Next</button>
-      <button type="button" class="mdl-button close">Cancel</button>
+       <button type="button" class="mdl-button createWorkFlow">Create</button> 
+     
     </div>
   </dialog>
+  
+  
   <?!= HtmlService.createHtmlOutputFromFile('workflowDialogue_JS').getContent(); ?> 
  </body>
 </html>
