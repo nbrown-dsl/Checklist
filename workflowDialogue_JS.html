@@ -7,6 +7,7 @@
     }
     
     $('.workflowEntry').hide();
+    $('#workflowList').hide(1000).empty();
     
     
     showModalButton.addEventListener('click', function() {
@@ -21,13 +22,19 @@
       dialog.close();
     });
     dialog.querySelector('.next').addEventListener('click', function() {
+    
+     updateWorkflowSelected()
+     
               $('.current').hide().removeClass('current').next().show(500).addClass('current');
               $('.back').prop( "disabled", false );
               if ( $('.current').hasClass("lastPage")) { $('.next').prop( "disabled", true );    }
               
-              updateWorkflowSelected()
+             
              
     });
+    
+    //delete workflow button
+     dialog.querySelector('#deleteWorkflow').addEventListener('click', function() { deleteWorkFlow() });
     
     
     //sets document properties from new workflow form fields
@@ -43,12 +50,9 @@
         indexed_array[n['name']] = n['value'];
     });
 
-    console.log( indexed_array);
-
                 google.script.run
             .withSuccessHandler(function(response){ 
             
-           console.log(response); 
             dialog.close(1000);
             confirm(response +" workflow created");
            
@@ -89,7 +93,7 @@ function workflowlist() {
  google.script.run
             .withSuccessHandler(function(list){ 
             
-            $('#workflowList').hide(1000).empty();
+           
             
             for (var l=0; l<list.length; l++) {
             $('<option />', { value:list[l], text:list[l] }).appendTo('#workflowList');
@@ -107,8 +111,15 @@ function workflowlist() {
             }
     
  function addEntry() {
-
-   $('.workflowEntry:first').clone().appendTo('#workflowFormDialogueEdit').fadeIn(1000);
+ 
+ var newEntry =   $('.workflowEntry:first').clone()
+ 
+ var entryNumber = $('.workflowEntry').length + 1;
+ 
+ newEntry.children('.entryDescription').attr('name','entryDescription'+entryNumber); 
+ newEntry.children('.entryOption').attr('name','entryOption'+entryNumber); 
+ 
+ newEntry.appendTo('#workflowFormDialogueEdit').fadeIn(1000);
 
 }
 
@@ -116,13 +127,50 @@ function workflowlist() {
 //presents form according to workflow selection on first page
 function updateWorkflowSelected() {
 
-var str = "Form for ";
+var str = "";
     $( "#workflowList option:selected" ).each(function() {
       str += $( this ).text() + " ";
     });
     
-    $( "#workflowFormName" ).text( str );
+    $( ".workflowFormName" ).text(str);
+    
+     google.script.run
+            .withSuccessHandler(function(response){ 
+           
+      console.log('success');
+      $( "#workflowFormFields" ).text(response.toString());
+            
+           })
+           .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+          $( "#workflowFormFields" ).text(msg);
+          })
+            .getworkflowForm(str);
+    
+    
   }
+  
+      //deletes workflow from doc properties 
+function deleteWorkFlow() {
+
+dialog.close();
+var workflowName = $(".workflowFormName:first").text();
+
+console.log( typeof workflowName);
+
+ google.script.run
+            .withSuccessHandler(function(response){ 
+           
+            confirm(response)
+            
+           })
+           .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            console.log(msg);
+          })
+            .deleteWorkFlow(workflowName);
+            
+            }
 
 
     

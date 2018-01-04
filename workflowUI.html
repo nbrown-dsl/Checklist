@@ -180,13 +180,11 @@
       </div>
        
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page2_form">
-         <h5 id="workflowFormName"></h5>
+          <h5>Form for</h5>&nbsp;<h5 class="workflowFormName"></h5>
           <form id="myForm">
-   
- 
-   
-   <input class="create" type="button" value="Submit" id="newStudentSubmit" />
-    </form>
+          <div id="workflowFormFields">Hello</div>
+            <input class="create" type="button" value="Submit" id="newStudentSubmit" />
+          </form>
      </div>
      
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page3_Newform">
@@ -196,8 +194,8 @@
            
             <p class="instructions">For Options fields, enter 'Text' for text, 'Date' for date, comma separated list for checkboxes and @ separated list for radio buttons</p><br> 
                 <div class = "workflowEntry">
-                  <label>Description</label><input class="mdl-textfield__input" type="text" size="40" name= "entry_description" />
-                  <label>Options</label><input class="mdl-textfield__input" type="text" size="40" name= "entry_options" /><br>
+                  <label>Description</label><input class="mdl-textfield__input entryDescription" type="text" size="40" name= "entry_description" />
+                  <label>Options</label><input class="mdl-textfield__input entryOption" type="text" size="40" name= "entry_options" /><br>
                 </div>
                 
                
@@ -205,13 +203,19 @@
          <button id ="addEntry" class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add entry</button> 
      </div>
      
-     <div class = "newWorkflowdialoguePage lastPage" id = "workflowdialogue_page4_tasks">
+     <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page4_tasks">
          <h5>Workflows tasks and responsibilities</h5>
         <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities fo rthis workflow</p> 
          <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">
               <option value='staff'>Staff</option>
               <option value='students'>Students</option>
            </select><br><br>
+     </div>
+     
+     <div class = "newWorkflowdialoguePage lastPage lastPage" id = "workflowdialogue_page5_delete">
+          <h5>Delete workflow</h5>&nbsp;<h5 class="workflowFormName"></h5>
+        <p class="instructions">This will permanently delete the workflow form. All previous workflows will be preserved.</p> 
+          <input class="create" type="button" value="Delete" id="deleteWorkflow" />
      </div>
    
     </div>

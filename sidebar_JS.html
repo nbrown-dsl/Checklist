@@ -20,7 +20,7 @@ function workflowlist() {
             
             for (var l=0; l<list.length; l++) {
             $('<p />', { value:list[l], text:list[l] }).appendTo('#workflowList');
-            $('#workflowList').append('<a class="workflowEdit" value="'+list[l]+'"><i class="material-icons">mode_edit</i></a>');
+            $('#workflowList').append('<div class="workflowListName" value="'+list[l]+'"></div> <button class="workflowEdit mdl-button mdl-button--icon" value="'+list[l]+'"><i class="material-icons">mode_edit</i></button>');
             }; 
              $('#workflowList').show(1000)
            })
