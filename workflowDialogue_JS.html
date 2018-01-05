@@ -44,17 +44,21 @@
       $('.createWorkFlow').prop( "disabled", false );
      
     var unindexed_array = $('.new_form').serializeArray();
+    
     var indexed_array = {};
-
     $.map(unindexed_array, function(n, i){
-        indexed_array[n['name']] = n['value'];
+        indexed_array["\""+n["name"]+"\""] = "\""+n["value"]+"\"";
+        
     });
+    
+    console.log(indexed_array);
 
                 google.script.run
             .withSuccessHandler(function(response){ 
             
             dialog.close(1000);
             confirm(response +" workflow created");
+             
            
            })
            .withFailureHandler(function(msg) {
@@ -133,12 +137,30 @@ var str = "";
     });
     
     $( ".workflowFormName" ).text(str);
+    $( "#workflowFormFields" ).empty();
     
      google.script.run
             .withSuccessHandler(function(response){ 
+            
+         var formString = response.replace(/=/g, ":");
+            
+          $('#workflowFormFields').append('<div>'+formString+'</div>');
+          
+          var formFields = JSON.parse(formString);
+      
+       
+       console.log(formFields);
+       console.log(typeof formFields);
+      
+          
+           for (var field in formFields ) { 
+            
+             $('<label />', { class:'formFieldLabel', text: formFields[field] }).appendTo('#workflowFormFields');
+             $('<br>').appendTo('#workflowFormFields');
+            
+            }
            
-      console.log('success');
-      $( "#workflowFormFields" ).text(response.toString());
+           
             
            })
            .withFailureHandler(function(msg) {

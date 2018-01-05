@@ -11,22 +11,27 @@ function listOfWorkFlows() {
 
 //adds workflow properties to doc properties , as objects keyed to workflow name
 function processworkflowForm(form_data) {
- 
+  
   var workflowName = form_data.workflow_name;
+  
+  var formObject = JSON.parse(JSON.stringify(form_data));
+  
   var docProperties = PropertiesService.getDocumentProperties();
   
   docProperties.setProperty(workflowName,form_data);
-  
-  return form_data.workflow_name ;
+   
+  return workflowName;
   
 }
 
 //gets workflow properties from doc properties for presenting as form in dialogue
 function getworkflowForm(workflowName) {
  
+ 
   var docProperties = PropertiesService.getDocumentProperties();
-  
+   
   var workflowForm = docProperties.getProperty(workflowName.trim());
+  
   
   return workflowForm;
   
