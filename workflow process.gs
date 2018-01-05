@@ -11,8 +11,8 @@ function listOfWorkFlows() {
 
 //adds workflow properties to doc properties , as objects keyed to workflow name
 function processworkflowForm(form_data) {
-  
-  var workflowName = form_data.workflow_name;
+    
+  var workflowName = form_data["\""+"workflow_name"+"\""].replace(/"/g,"");
   
   var formObject = JSON.parse(JSON.stringify(form_data));
   

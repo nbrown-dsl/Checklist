@@ -142,17 +142,13 @@ var str = "";
      google.script.run
             .withSuccessHandler(function(response){ 
             
-         var formString = response.replace(/=/g, ":");
-            
+        var formString = response.replace(/=/g, ":");
+         var formFields = JSON.parse(formString);   
+          
           $('#workflowFormFields').append('<div>'+formString+'</div>');
-          
-          var formFields = JSON.parse(formString);
-      
-       
-       console.log(formFields);
-       console.log(typeof formFields);
-      
-          
+           console.log(formFields);
+           console.log(typeof formFields);
+         
            for (var field in formFields ) { 
             
              $('<label />', { class:'formFieldLabel', text: formFields[field] }).appendTo('#workflowFormFields');
