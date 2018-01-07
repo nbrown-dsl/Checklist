@@ -1,5 +1,5 @@
 //serves checklist interface
-//url of webapp called with spreadsheet id and list paramters
+// url of webapp called with spreadsheet id and list paramters
 // ?ssId=1kNa3-pDtp1W0ZrRzxCK49Uf6hA15HewvjpyPmzub2UQ&list=trip
 //list parameter same name at html file name that is served as interface
 

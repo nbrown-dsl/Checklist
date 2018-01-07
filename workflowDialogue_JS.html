@@ -50,7 +50,8 @@
         indexed_array["\""+n["name"]+"\""] = "\""+n["value"]+"\"";
         
     });
-    
+     
+     console.log(unindexed_array);
     console.log(indexed_array);
 
                 google.script.run
@@ -113,7 +114,8 @@ function workflowlist() {
             .listOfWorkFlows();
             
             }
-    
+            
+ //adds blank form field to edit page 
  function addEntry() {
  
  var newEntry =   $('.workflowEntry:first').clone()
@@ -124,6 +126,10 @@ function workflowlist() {
  newEntry.children('.entryOption').attr('name','entryOption'+entryNumber); 
  
  newEntry.appendTo('#workflowFormDialogueEdit').fadeIn(1000);
+ 
+ if ( entryNumber >6 ) { 
+  $('#addEntry').prop( "disabled", true );
+  }
 
 }
 
@@ -148,15 +154,47 @@ var str = "";
           $('#workflowFormFields').append('<div>'+formString+'</div>');
            console.log(formFields);
            console.log(typeof formFields);
-         
-           for (var field in formFields ) { 
-            
-             $('<label />', { class:'formFieldLabel', text: formFields[field] }).appendTo('#workflowFormFields');
-             $('<br>').appendTo('#workflowFormFields');
-            
-            }
+  
+  //creates form field elements from formField object properties
+   
+              
+          $('<h4 />', { class:'formFieldLabel', text: formFields['workflow_name'] }).appendTo('#workflowFormFields');
+       
+          for (var entries = 2; entries < 20; entries++) {
+          
+          var entryOption = 'entryOption'+entries;
+          var entryDescription = 'entryDescription'+entries;
+          
+          if (!formFields[entryOption]) { break };
            
+          if (formFields[entryOption] == "Text" || formFields[entryOption] == "Date" ) {
+                $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
+                $('<input />', { class:'formFieldInput', type: formFields[entryOption].toLowerCase() }).appendTo('#workflowFormFields');
+                $('<br>').appendTo('#workflowFormFields');
+             }
+    
+          else if (formFields[entryOption].indexOf("@")>-1) {
+                $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
+                var selectOptionsArray = formFields[entryOption].split('@');
+                selectOptionsArray.map(function(i,v) {
+                $('<input />', { class:'formFieldInput', type: "radio", value:selectOptionsArray[i], name: formFields[entryDescription] }).appendTo('#workflowFormFields');
+                $('<p/>', { class:'formFieldInput', text:selectOptionsArray[i] }).appendTo('#workflowFormFields');
+                });
+           }
            
+           else if (formFields[entryOption].indexOf(",")>-1) {
+                $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
+                $('<select />', { class:'formFieldSelect' }).appendTo('#workflowFormFields');
+                var selectOptionsArray = formFields[entryOption].split(',');
+                selectOptionsArray.map(function(optionValue) {
+                $('<option />', { class:'formFieldInput', value: optionValue, text: optionValue }).appendTo('.formFieldSelect');
+                
+                });
+           }
+           
+           }
+           
+      
             
            })
            .withFailureHandler(function(msg) {
