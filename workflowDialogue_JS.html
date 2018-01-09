@@ -81,15 +81,6 @@
     dialog.querySelector('#addEntry').addEventListener('click', function() {
               addEntry();
     });
-
-    
-    
-    //     dialog.querySelector('#workflowList').addEventListener('change', function() {
-//              updateWorkflowSelected();
-//    });
-//  
-    
-    
     
     workflowlist();
     
@@ -116,20 +107,21 @@ function workflowlist() {
             }
             
  //adds blank form field to edit page 
- function addEntry() {
+ function addEntry(description,option) {
  
  var newEntry =   $('.workflowEntry:first').clone()
  
  var entryNumber = $('.workflowEntry').length + 1;
  
- newEntry.children('.entryDescription').attr('name','entryDescription'+entryNumber); 
- newEntry.children('.entryOption').attr('name','entryOption'+entryNumber); 
+ newEntry.children('.entryDescription').attr({ name: 'entryDescription'+entryNumber, value:description} ); 
+ newEntry.children('.entryOption').attr({ name: 'entryOption'+entryNumber, value: option}); 
  
- newEntry.appendTo('#workflowFormDialogueEdit').fadeIn(1000);
+ newEntry.appendTo('#formEntryFields').fadeIn(1000);
  
  if ( entryNumber >6 ) { 
   $('#addEntry').prop( "disabled", true );
   }
+  
 
 }
 
@@ -143,29 +135,29 @@ var str = "";
     });
     
     $( ".workflowFormName" ).text(str);
-    $( "#workflowFormFields" ).empty();
+    $( "#workflowFormFields, #formEntryFields" ).empty();
     
      google.script.run
             .withSuccessHandler(function(response){ 
             
         var formString = response.replace(/=/g, ":");
          var formFields = JSON.parse(formString);   
-          
-          $('#workflowFormFields').append('<div>'+formString+'</div>');
+                
            console.log(formFields);
-           console.log(typeof formFields);
-  
-  //creates form field elements from formField object properties
-   
+         
+  //creates form field elements and edit form elements from formField object properties
               
-          $('<h4 />', { class:'formFieldLabel', text: formFields['workflow_name'] }).appendTo('#workflowFormFields');
+          $('<h4 />', { class:'formFieldLabel', text: 'Form for '+formFields['workflow_name'] }).appendTo('#workflowFormFields');
+          $('#workflowName').attr('value', formFields['workflow_name']);
        
-          for (var entries = 2; entries < 20; entries++) {
+          for (var entries = 2; entries < 8; entries++) {
           
           var entryOption = 'entryOption'+entries;
-          var entryDescription = 'entryDescription'+entries;
+          var entryDescription = 'entryDescription'+entries;    
           
           if (!formFields[entryOption]) { break };
+          
+         addEntry(formFields[entryDescription],formFields[entryOption]) 
            
           if (formFields[entryOption] == "Text" || formFields[entryOption] == "Date" ) {
                 $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
@@ -184,17 +176,16 @@ var str = "";
            
            else if (formFields[entryOption].indexOf(",")>-1) {
                 $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
-                $('<select />', { class:'formFieldSelect' }).appendTo('#workflowFormFields');
+                var selectID = formFields[entryDescription].replace(" ","");
+                $('<select />', { class:'formFieldSelect', id:selectID }).appendTo('#workflowFormFields');
                 var selectOptionsArray = formFields[entryOption].split(',');
                 selectOptionsArray.map(function(optionValue) {
-                $('<option />', { class:'formFieldInput', value: optionValue, text: optionValue }).appendTo('.formFieldSelect');
+                $('<option />', { class:'formFieldInput', value: optionValue, text: optionValue }).appendTo('#'+selectID);
                 
                 });
            }
            
            }
-           
-      
             
            })
            .withFailureHandler(function(msg) {

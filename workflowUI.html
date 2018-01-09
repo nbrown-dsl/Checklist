@@ -167,7 +167,7 @@
 
 
 <dialog class="mdl-dialog" id="newWorkflowdialogue">
-  <div class="mdl-dialog__title">Create workflow</div>
+  <div class="mdl-dialog__title">Workflow setup</div>
     <div class="mdl-dialog__content">
     
     <i type="button" class="close material-icons">close</i>
@@ -180,7 +180,7 @@
       </div>
        
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page2_form">
-          <h5><span>Form for</span>&nbsp;<span class="workflowFormName"></span></h5>
+          
           <form id="myForm">
           <div id="workflowFormFields"></div>
             <input class="create" type="button" value="Submit" id="newStudentSubmit" />
@@ -192,21 +192,27 @@
           <form id="workflowFormDialogueEdit" class="new_form"> 
            <label>Workflow name</label><input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
            
+           <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities for this workflow</p> 
+         <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">
+              <option value='staff'>Staff</option>
+              <option value='students'>Students</option>
+           </select><br><br>
+           
             <p class="instructions">For Options fields, enter 'Text' for text, 'Date' for date and comma separated list for drop down list</p><br> 
                 <div class = "workflowEntry">
                   <label>Description</label><input class="mdl-textfield__input entryDescription" type="text" size="40" name= "entry_description" />
                   <label>Options</label><input class="mdl-textfield__input entryOption" type="text" size="40" name= "entry_options" /><br>
                 </div>
-                
-               
+                <div id="formEntryFields"></div>
+            
          </form>
          <button id ="addEntry" class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add entry</button> 
      </div>
      
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page4_tasks">
          <h5>Workflows tasks and responsibilities</h5>
-        <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities fo rthis workflow</p> 
-         <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">
+        <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities for this workflow</p> 
+         <select class="mdl-selectfield__select" id="tasksSheetDEP" name = "tasks_sheetName">
               <option value='staff'>Staff</option>
               <option value='students'>Students</option>
            </select><br><br>
