@@ -79,10 +79,21 @@
               removeEntry();
     });
     
-    workflowlist();
+     dialog.querySelector('#newStudentSubmit').addEventListener('click', function() {
+              $('#newStudentSubmit').prop( "disabled", true );
+              var formArray = ($('#myForm2').serializeArray());
+              var workFlowName =  $('#workflowName').attr('value');
+              console.log(formArray);
+  google.script.run
+            .withSuccessHandler(function(response){ dialog.close(1000); confirm(response); studentList(); })
+            .processWorkflow(formArray,workFlowName)
+  
+    });
     
-    //appends list of workflows from doc properties keys
-function workflowlist() {
+    workflowTypelist();
+       
+    //appends list of workflows from doc properties keys upon initialization
+function workflowTypelist() {
  google.script.run
             .withSuccessHandler(function(list){ 
             
@@ -102,6 +113,16 @@ function workflowlist() {
             .listOfWorkFlows();
             
             }
+  
+  //new workflow submitted, spreadsheet rows added, workflow list updated
+  function submitWorkflow() {
+  $('#newStudentSubmit').prop( "disabled", true );
+  google.script.run
+            .withSuccessHandler(function(response){ dialog.close(1000); confirm(response); studentList(); })
+            .processForm(this.parentNode)
+  
+  
+  }
             
  //adds blank form field to edit page 
  function addEntry(description,option) {
@@ -168,7 +189,7 @@ var str = "";
            
           if (formFields[entryOption] == "Text" || formFields[entryOption] == "Date" ) {
                 $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
-                $('<input />', { class:'formFieldInput', type: formFields[entryOption].toLowerCase() }).appendTo('#workflowFormFields');
+                $('<input />', { class:'formFieldInput', type: formFields[entryOption].toLowerCase(), name: formFields[entryDescription]  }).appendTo('#workflowFormFields');
                 $('<br>').appendTo('#workflowFormFields');
              }
     
@@ -176,7 +197,7 @@ var str = "";
                 $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
                 var selectOptionsArray = formFields[entryOption].split('@');
                 selectOptionsArray.map(function(i,v) {
-                $('<input />', { class:'formFieldInput', type: "radio", value:selectOptionsArray[i], name: formFields[entryDescription] }).appendTo('#workflowFormFields');
+                $('<input />', { class:'formFieldInput', type: 'radio', value: selectOptionsArray[i], name: formFields[entryDescription] }).appendTo('#workflowFormFields');
                 $('<p/>', { class:'formFieldInput', text:selectOptionsArray[i] }).appendTo('#workflowFormFields');
                 });
            }
@@ -184,7 +205,7 @@ var str = "";
            else if (formFields[entryOption].indexOf(",")>-1) {
                 $('<label />', { class:'formFieldLabel', text:formFields[entryDescription] }).appendTo('#workflowFormFields');
                 var selectID = formFields[entryDescription].replace(" ","");
-                $('<select />', { class:'formFieldSelect', id:selectID }).appendTo('#workflowFormFields');
+                $('<select />', { class:'formFieldSelect', id:selectID, name: formFields[entryDescription]}).appendTo('#workflowFormFields');
                 var selectOptionsArray = formFields[entryOption].split(',');
                 selectOptionsArray.map(function(optionValue) {
                 $('<option />', { class:'formFieldInput', value: optionValue, text: optionValue }).appendTo('#'+selectID);

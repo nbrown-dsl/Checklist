@@ -9,7 +9,7 @@ function listOfWorkFlows() {
 }
 
 
-//adds workflow properties to doc properties , as objects keyed to workflow name
+//adds workflow properties to doc properties , as objects keyed to workflow name, and creates/ammends sheet for workflow type 
 function processworkflowForm(form_data) {
   
   var repsonse = "";
@@ -22,11 +22,16 @@ function processworkflowForm(form_data) {
   
   var ss=SpreadsheetApp.getActiveSpreadsheet();
   
+  
   //if new workflow type then creates new sheet
   if (!workflowObject) {
-     
-      wfSheet = ss.insertSheet();
-      wfSheet.setName('#WF_'+workflowName);
+    
+  var ssTemplate = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1-6m6HQjhMVDW7ZdYALhLxYJA3WUxKxIZc8ZS5ZCOpeI/edit#gid=0") 
+   
+  wfSheet = ssTemplate.getSheetByName("#workflow_template").copyTo(ss);   
+  wfSheet.setName('#WF_'+workflowName);
+  SpreadsheetApp.getActiveSpreadsheet().setActiveSheet(wfSheet);
+  SpreadsheetApp.getActiveSpreadsheet().moveActiveSheet(2);
   
   var sheetId = wfSheet.getSheetId();
       
@@ -41,15 +46,28 @@ function processworkflowForm(form_data) {
     
     response = workflowName + " updated"; }
   
+  //setting form fields of workflow type in each task row
   var formObject = JSON.parse(JSON.stringify(form_data));
   ss.setActiveSheet(wfSheet);
-  ss.setActiveRange(wfSheet.getRange(1, 1));
   
-    for (var key in formObject) { 
+  var formInfoHeaders = ss.setActiveRange(wfSheet.getRange(1,1));
+  
+  for (var key in formObject) { 
       
-      wfSheet.getActiveCell().setValue(formObject[key]);
-      wfSheet.setActiveSelection(wfSheet.getActiveRange().offset(0, 1));
-    
+      formObject[key] = formObject[key].replace(/"/g,"");
+      
+    if ( key.indexOf("entryOption")<0 && formObject[key].length >1 ) {
+      if ( key.indexOf("workflow_name")>0 ) {
+        wfSheet.getRange("B2:B2").setValue([formObject[key]]);
+      }
+      if ( key.indexOf("sheetId")>0 ) {
+        wfSheet.getRange("A2:A2").setValue([formObject[key]]);
+      }
+      if ( key.indexOf("tasks_sheetName")>0 ) {
+        wfSheet.getRange("C2:C2").setValue([formObject[key]]);
+      }
+ 
+    }
     }
  
   docProperties.setProperty(workflowName,form_data);
