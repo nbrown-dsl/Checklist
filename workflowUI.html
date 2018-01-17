@@ -44,8 +44,8 @@
  
 <!-- Sidebar with choice of protocols --> 
   <div class="mdl-layout__drawer">
-    <span class="mdl-layout-title">Protocols</span>
-    <nav class="mdl-navigation">
+    <span class="mdl-layout-title">Types of Workflow</span>
+    <nav class="mdl-navigation" id="typesOfWorkflow">
       <a class="mdl-navigation__link workflow" value="arrival"><i class="material-icons">flight_land</i>&nbsp;&nbsp;Arrivals</a>
       <a class="mdl-navigation__link workflow" value="leaver"><i class="material-icons">flight_takeoff</i>&nbsp;&nbsp;Leavers</a>
       <a class="mdl-navigation__link workflow" value="trip"><i class="material-icons">airport_shuttle</i>&nbsp;&nbsp;Trips</a>
@@ -190,7 +190,7 @@
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page3_Newform">
         
           <form id="workflowFormDialogueEdit" class="new_form"> 
-           <label>Workflow name</label><input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
+           <label>Workflow Type name</label><input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
            
            <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities for this workflow</p> 
          <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">
@@ -206,21 +206,15 @@
                 <div id="formEntryFields"></div>
             
          </form>
+         <div class="entryButton">
          <button id ="addEntry" class = "mdl-button mdl-js-button mdl-button--raised mdl-button--accent">Add entry</button> 
+         <button id ="removeEntry" class = "mdl-button mdl-js-button mdl-button--raised mdl-button">Remove entry</button>
+         </div>
      </div>
      
-     <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page4_tasks">
-         <h5>Workflows tasks and responsibilities</h5>
-        <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities for this workflow</p> 
-         <select class="mdl-selectfield__select" id="tasksSheetDEP" name = "tasks_sheetName">
-              <option value='staff'>Staff</option>
-              <option value='students'>Students</option>
-           </select><br><br>
-     </div>
-     
-     <div class = "newWorkflowdialoguePage lastPage lastPage" id = "workflowdialogue_page5_delete">
-          <h5><span>Delete workflow</span>&nbsp;<span class="workflowFormName"></span></h5>
-        <p class="instructions">This will permanently delete the workflow form. All previous workflows will be preserved.</p> 
+     <div class = "newWorkflowdialoguePage lastPage" id = "workflowdialogue_page4_delete">
+          <h5><span>Delete workflow type</span>&nbsp;<span class="workflowFormName"></span></h5>
+        <p class="instructions">This will permanently delete this type of workflow. All previous workflows of this type will be preserved.</p> 
           <input class="create" type="button" value="Delete" id="deleteWorkflow" />
      </div>
    

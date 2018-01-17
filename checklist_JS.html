@@ -4,7 +4,7 @@
    /**
    * Run initializations on load.
    */
-           
+ getWorkFlowTypes();          
 
 $('#page1, #page2, #page3, #workflowForm, #newWorkflowdialogue').hide();
 
@@ -44,26 +44,40 @@ $('#newStudentSubmit').click(function() {
 //shows relevant list in response to click on protocol choice in sidebar
 $('.workflow').click(function() {  var workflow = $(this).attr('value'); studentList(workflow) }); 
 
+//onload gets list of workflow types and task sheets
+function getWorkFlowTypes() {
+
+google.script.run
+            .withSuccessHandler(function(workflowtypes) {
+             
+        workflowtypes.map(function(workflowName) { 
+       
+       $('#typesOfWorkflow').append(" <a class='mdl-navigation__link workflow' value="+workflowName+"><i class='material-icons'>flight_land</i>&nbsp;&nbsp;"+workflowName+"</a>")
+        });
+          
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+           console.log(msg)          
+          })
+            .listOfWorkFlows(); 
+}
+
+
 //shows add workflow dialogue
 function addWorkflow() {
 
 google.script.run
-            .withSuccessHandler(function(formData) {
-            
-            
-             $('#newWorkflowdialogue').show(1000);
-              
-            
-          })
-       .withFailureHandler(function(msg) {
-            // Respond to failure conditions here.
-            $('#newWorkflowdialogue').html(msg);
-            $('#newWorkflowdialogue').show(1000);
-           
-          })
+            .withSuccessHandler(function(formData) {          
+              $('#newWorkflowdialogue').show(1000);          
+              })
+            .withFailureHandler(function(msg) {
+              // Respond to failure conditions here.
+              $('#newWorkflowdialogue').html(msg);
+              $('#newWorkflowdialogue').show(1000);         
+            })
             .getFormData(); 
-
-}
+        }
 
 
 //shows add to list form

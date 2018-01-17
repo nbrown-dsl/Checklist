@@ -11,16 +11,50 @@ function listOfWorkFlows() {
 
 //adds workflow properties to doc properties , as objects keyed to workflow name
 function processworkflowForm(form_data) {
-    
+  
+  var repsonse = "";
+  var wfSheet;
+  var docProperties = PropertiesService.getDocumentProperties();
+
   var workflowName = form_data["\""+"workflow_name"+"\""].replace(/"/g,"");
   
+  var workflowObject = docProperties.getProperty(workflowName);
+  
+  var ss=SpreadsheetApp.getActiveSpreadsheet();
+  
+  //if new workflow type then creates new sheet
+  if (!workflowObject) {
+     
+      wfSheet = ss.insertSheet();
+      wfSheet.setName('#WF_'+workflowName);
+  
+  var sheetId = wfSheet.getSheetId();
+      
+  form_data["\""+"sheetId"+"\""] = '"'+sheetId+'"';  
+  response = workflowName + " created";
+    
+  }
+  
+  else { 
+    
+   wfSheet = ss.getSheetByName('#WF_'+workflowName);
+    
+    response = workflowName + " updated"; }
+  
   var formObject = JSON.parse(JSON.stringify(form_data));
+  ss.setActiveSheet(wfSheet);
+  ss.setActiveRange(wfSheet.getRange(1, 1));
   
-  var docProperties = PropertiesService.getDocumentProperties();
-  
+    for (var key in formObject) { 
+      
+      wfSheet.getActiveCell().setValue(formObject[key]);
+      wfSheet.setActiveSelection(wfSheet.getActiveRange().offset(0, 1));
+    
+    }
+ 
   docProperties.setProperty(workflowName,form_data);
-   
-  return workflowName;
+    
+  return response;
   
 }
 

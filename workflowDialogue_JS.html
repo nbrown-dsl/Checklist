@@ -49,25 +49,19 @@
     $.map(unindexed_array, function(n, i){
         indexed_array["\""+n["name"]+"\""] = "\""+n["value"]+"\"";
         
-    });
-     
-     console.log(unindexed_array);
-    console.log(indexed_array);
-
-                google.script.run
+    });   
+        google.script.run
             .withSuccessHandler(function(response){ 
             
             dialog.close(1000);
-            confirm(response +" workflow created");
-             
-           
+            confirm(response);
+       
            })
            .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
             console.log(msg);
           })
             .processworkflowForm(indexed_array)
-            
             
     });
     
@@ -80,6 +74,9 @@
     });
     dialog.querySelector('#addEntry').addEventListener('click', function() {
               addEntry();
+    });
+     dialog.querySelector('#removeEntry').addEventListener('click', function() {
+              removeEntry();
     });
     
     workflowlist();
@@ -109,6 +106,8 @@ function workflowlist() {
  //adds blank form field to edit page 
  function addEntry(description,option) {
  
+ $('#removeEntry').prop( "disabled", false );
+ 
  var newEntry =   $('.workflowEntry:first').clone()
  
  var entryNumber = $('.workflowEntry').length + 1;
@@ -122,8 +121,18 @@ function workflowlist() {
   $('#addEntry').prop( "disabled", true );
   }
   
-
 }
+
+//remove last form field
+
+function removeEntry() {
+ 
+ if ($('.workflowEntry').length>1) { $('.workflowEntry:last').remove();}
+  if ($('.workflowEntry').length==1) { $('#removeEntry').prop( "disabled", true );}
+  
+ $('#addEntry').prop( "disabled", false );
+ 
+ }
 
 
 //presents form according to workflow selection on first page
@@ -143,8 +152,6 @@ var str = "";
         var formString = response.replace(/=/g, ":");
          var formFields = JSON.parse(formString);   
                 
-           console.log(formFields);
-         
   //creates form field elements and edit form elements from formField object properties
               
           $('<h4 />', { class:'formFieldLabel', text: 'Form for '+formFields['workflow_name'] }).appendTo('#workflowFormFields');
@@ -202,8 +209,6 @@ function deleteWorkFlow() {
 
 dialog.close();
 var workflowName = $(".workflowFormName:first").text();
-
-console.log( typeof workflowName);
 
  google.script.run
             .withSuccessHandler(function(response){ 
