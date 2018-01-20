@@ -1,3 +1,6 @@
+
+//adds new workflow tasks and properties to spreadsheet
+
 function processWorkflow(formArray,workFlowName) {
   
    var docProperties = PropertiesService.getDocumentProperties();
@@ -5,16 +8,18 @@ function processWorkflow(formArray,workFlowName) {
   //retrieves values of fields entered in form, passed as object with values keyed to form fields names
    var ss = SpreadsheetApp.getActive();
   
-  var sheetName = "#WF_"+workFlowName;
+  var sheetName = "#workflows";
   
   var sheet = ss.getSheetByName(sheetName);
-  
-  sheet.getRange(3, 1).setValue(formArray);
-  sheet.getRange(4, 1).setValue(workflowObject);
-  
  
+  var lastRow = sheet.getLastRow();
+  sheet.getRange(lastRow+1, 1).setValue(formArray);
+  sheet.getRange(lastRow+2, 1).setValue(workflowObject);
   
   
-  return formArray[0].value;
+  var response = workFlowName + " created";
+
+  return response;
   
 }
+

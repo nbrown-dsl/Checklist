@@ -48,7 +48,6 @@
     var indexed_array = {};
     $.map(unindexed_array, function(n, i){
         indexed_array["\""+n["name"]+"\""] = "\""+n["value"]+"\"";
-        
     });   
         google.script.run
             .withSuccessHandler(function(response){ 
@@ -79,14 +78,21 @@
               removeEntry();
     });
     
+    
+    //adds new workflow tasks and properties to spreadsheet
      dialog.querySelector('#newStudentSubmit').addEventListener('click', function() {
               $('#newStudentSubmit').prop( "disabled", true );
-              var formArray = ($('#myForm2').serializeArray());
+              var formArray = $('#myForm2').serializeArray();
+            
+             var formArrayIndex = {};
+    $.map(formArray, function(n, i){
+        formArrayIndex["\""+n["name"]+"\""] = "\""+n["value"]+"\"";
+           });     
+              
               var workFlowName =  $('#workflowName').attr('value');
-              console.log(formArray);
   google.script.run
             .withSuccessHandler(function(response){ dialog.close(1000); confirm(response); studentList(); })
-            .processWorkflow(formArray,workFlowName)
+            .processWorkflow(formArrayIndex,workFlowName)
   
     });
     
@@ -177,7 +183,8 @@ var str = "";
               
           $('<h4 />', { class:'formFieldLabel', text: 'Form for '+formFields['workflow_name'] }).appendTo('#workflowFormFields');
           $('#workflowName').attr('value', formFields['workflow_name']);
-       
+           $('<input />', { class:'formFieldInput', type: 'text', name: 'tasks_sheetName', value:formFields['tasks_sheetName']  }).appendTo('#workflowFormFields');
+
           for (var entries = 2; entries < 8; entries++) {
           
           var entryOption = 'entryOption'+entries;
