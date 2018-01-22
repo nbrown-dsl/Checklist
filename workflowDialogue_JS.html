@@ -98,26 +98,32 @@
     
     workflowTypelist();
        
-    //appends list of workflows from doc properties keys upon initialization
+    //appends list of workflows (from doc properties keys) and tasks sheets  (from spreadsheet) upon initialization
 function workflowTypelist() {
  google.script.run
             .withSuccessHandler(function(list){ 
-            
-           
-            
+                     
             for (var l=0; l<list.length; l++) {
             $('<option />', { value:list[l], text:list[l] }).appendTo('#workflowList');
             //$('#workflowList').append('<a class="workflowEdit" value="'+list[l]+'"><i class="material-icons">mode_edit</i></a>');
             }; 
              $('<option />', { value:'new', text:'New type of workflow' }).appendTo('#workflowList');
              $('#workflowList').show(1000)
-           })
+           }   
+           )
            .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
              $('#workflowList').html(msg);
           })
             .listOfWorkFlows();
             
+   google.script.run
+            .withSuccessHandler(function(list){  
+            for (var l=0; l<list.length; l++) {
+             $('<option />', { value:list[l], text:list[l] }).appendTo('#tasksSheet');
+             }
+            })      
+             .listofTaskSheets()
             }
   
   //new workflow submitted, spreadsheet rows added, workflow list updated
@@ -183,7 +189,8 @@ var str = "";
               
           $('<h4 />', { class:'formFieldLabel', text: 'Form for '+formFields['workflow_name'] }).appendTo('#workflowFormFields');
           $('#workflowName').attr('value', formFields['workflow_name']);
-           $('<input />', { class:'formFieldInput', type: 'text', name: 'tasks_sheetName', value:formFields['tasks_sheetName']  }).appendTo('#workflowFormFields');
+          $('<input />', { class:'formFieldInput', type: 'text', name: 'workflow_name', value:formFields['workflow_name']  }).appendTo('#workflowFormFields');
+          $('<input />', { class:'formFieldInput', type: 'text', name: 'tasks_sheetName', value:formFields['tasks_sheetName']  }).appendTo('#workflowFormFields');
 
           for (var entries = 2; entries < 8; entries++) {
           
