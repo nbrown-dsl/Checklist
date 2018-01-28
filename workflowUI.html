@@ -180,17 +180,18 @@
       </div>
        
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page2_form">
-          
+        <div id="workflowType_title"></div>  
           <form id="myForm2" >
-          <div id="workflowFormFields"></div>
+            <label>Workflow Name</label><input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
             <input class="create" type="button" value="Submit" id="newStudentSubmit" />
+            <div id="workflowFormFields"></div>
           </form>
      </div>
      
      <div class = "newWorkflowdialoguePage" id = "workflowdialogue_page3_Newform">
         
           <form id="workflowFormDialogueEdit" class="new_form"> 
-           <label>Workflow Type name</label><input id="workflowName" class="mdl-textfield__input" type="text" size="200" name = "workflow_name" /><br>
+           <label>Workflow Type name</label><input id="workflowType" class="mdl-textfield__input" type="text" size="200" name = "workflow_type" /><br>
            
            <p class="instructions">Select sheet in spreadsheet of tasks and responsibilities for this workflow</p> 
          <select class="mdl-selectfield__select" id="tasksSheet" name = "tasks_sheetName">

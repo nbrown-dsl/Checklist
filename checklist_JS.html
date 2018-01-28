@@ -52,8 +52,12 @@ google.script.run
              
         workflowtypes.map(function(workflowName) { 
        
-       $('#typesOfWorkflow').append(" <a class='mdl-navigation__link workflow' value="+workflowName+"><i class='material-icons'>flight_land</i>&nbsp;&nbsp;"+workflowName+"</a>")
+      // $('#typesOfWorkflow').append(" <a class='mdl-navigation__link workflowType' value="+workflowName+">"+workflowName+"</a>")
+       $('<a/>', { class:'mdl-navigation__link workflowType', value: workflowName, text:workflowName }).appendTo('#typesOfWorkflow');
         });
+        
+        // NEW shows relevant list in response to click on protocol choice in sidebar
+       $('.workflowType').click(function() {  console.log("clicked"); var workflowType = $(this).attr('value'); workflowList(workflowType) }); 
           
           })
        .withFailureHandler(function(msg) {
@@ -136,6 +140,35 @@ google.script.run
              $('#listofusers').html(msg);
           })
             .findStudents(workflow); 
+
+
+}
+
+// NEW called when protocol type selected from sidebar, passes prtocol type (workflow parameter)
+
+function workflowList(workflowType) {
+
+console.log("clicked");
+
+    $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
+    $('#page2, #page1').hide();
+    $('#fabplus').prop( "disabled", false );
+    $('#workflow_type').text(workflowType);
+   
+google.script.run
+            .withSuccessHandler(function(students) {
+            // Respond to success conditions here.
+           console.log("clicked2");
+              createRadioboxes(students);
+              $('#page1').show(1000);
+              $('#tasks').prop( "disabled", false );
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            $('#listofusers').show();
+             $('#listofusers').html(msg);
+          })
+            .findStudents(workflowType); 
 
 
 }

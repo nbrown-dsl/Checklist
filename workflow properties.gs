@@ -32,9 +32,9 @@ function processworkflowForm(form_data) {
   var wfSheet;
   var docProperties = PropertiesService.getDocumentProperties();
 
-  var workflowName = form_data["\""+"workflow_name"+"\""].replace(/"/g,"");
+  var workflowType = form_data["\""+"workflow_type"+"\""].replace(/"/g,"");
   
-  var workflowObject = docProperties.getProperty(workflowName);
+  var workflowObject = docProperties.getProperty(workflowType);
   
  // var ss=SpreadsheetApp.getActiveSpreadsheet();
   
@@ -52,7 +52,7 @@ function processworkflowForm(form_data) {
 //  var sheetId = wfSheet.getSheetId();
 //      
 //  form_data["\""+"sheetId"+"\""] = '"'+sheetId+'"';  
-  response = workflowName + " created";
+  response = workflowType + " workflow type created";
     
   }
   
@@ -60,7 +60,7 @@ function processworkflowForm(form_data) {
     
   // wfSheet = ss.getSheetByName('#WF_'+workflowName);
     
-    response = workflowName + " updated"; }
+    response = workflowType + " workflow type updated"; }
   
   //setting form fields of workflow type in each task row
 //  var formObject = JSON.parse(JSON.stringify(form_data));
@@ -86,7 +86,7 @@ function processworkflowForm(form_data) {
 //    }
 //    }
  
-  docProperties.setProperty(workflowName,form_data);
+  docProperties.setProperty(workflowType,form_data);
     
   return response;
   
