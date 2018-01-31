@@ -27,3 +27,15 @@ function processWorkflow(formArray) {
   
 }
 
+//returns object[][] of workflow sheet list of all tasks
+function allTasks() {
+  
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('#workflows');
+  var  allTasks = sheet.getDataRange().getValues();  //returns object[][] of task values
+    
+  return allTasks; 
+  
+}
+
+
+

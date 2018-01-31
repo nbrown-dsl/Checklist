@@ -4,7 +4,8 @@
    /**
    * Run initializations on load.
    */
- getWorkFlowTypes();          
+ getWorkFlowTypes();    
+ 
 
 $('#page1, #page2, #page3, #workflowForm, #newWorkflowdialogue').hide();
 
@@ -57,7 +58,7 @@ google.script.run
         });
         
         // NEW shows relevant list in response to click on protocol choice in sidebar
-       $('.workflowType').click(function() {  console.log("clicked"); var workflowType = $(this).attr('value'); workflowList(workflowType) }); 
+       $('.workflowType').click(function() {  var workflowType = $(this).attr('value'); workflowList(workflowType) }); 
           
           })
        .withFailureHandler(function(msg) {
@@ -144,11 +145,9 @@ google.script.run
 
 }
 
-// NEW called when protocol type selected from sidebar, passes prtocol type (workflow parameter)
+// NEW called when protocol type selected from sidebar, passes prtocol type (workflow parameter) and filters list of workflows
 
 function workflowList(workflowType) {
-
-console.log("clicked");
 
     $('#newStudentSubmit, .page2button ,#tasks' ).prop( "disabled", true );
     $('#page2, #page1').hide();
@@ -156,11 +155,12 @@ console.log("clicked");
     $('#workflow_type').text(workflowType);
    
 google.script.run
-            .withSuccessHandler(function(students) {
+            .withSuccessHandler(function(tasks) {
             // Respond to success conditions here.
-           console.log("clicked2");
-              createRadioboxes(students);
-              $('#page1').show(1000);
+           allTasksList(tasks);
+           $('#page2').show(1000);
+            //  createRadioboxes(students);
+            //  $('#page1').show(1000);
               $('#tasks').prop( "disabled", false );
           })
        .withFailureHandler(function(msg) {
@@ -168,10 +168,68 @@ google.script.run
             $('#listofusers').show();
              $('#listofusers').html(msg);
           })
-            .findStudents(workflowType); 
+            .allTasks(workflowType); 
 
 
 }
+
+//NEW creates list of all tasks
+
+function allTasksList(tasks) {
+
+var taskNumber = tasks.length;
+   var id="";
+ $('#workFlow_info').empty();
+
+//create table for each workflow and assign workflowname as table id
+ var firstColumn = tasks.map(function(e) { return e[0] });
+ var unique = firstColumn.filter( function (value, index, self) { 
+               return self.indexOf(value) === index;});
+
+unique.map(function(e,i) {
+
+var workflowInfo_object = JSON.parse(e.replace(/=/g,":"));
+var WFid = workflowInfo_object["workflow_name"].replace(/ /g,"");
+
+$('#taskTableTemplate').clone().attr({
+  id: WFid
+}).appendTo('#page2');
+
+ var i;
+ for (i in workflowInfo_object) {
+ var table = "#"+WFid;
+ $('<h6 />').html(workflowInfo_object[i]).insertBefore(table);
+ }
+
+});
+
+
+   var container = $('tbody').on( "click", "input.taskDone", addUsername).empty();
+   
+   //add row to appropriate table for each task
+
+ for (var f=1; f<taskNumber ; f++) {
+ 
+ var workflowInfo_objectRow = JSON.parse(tasks[f][0].replace(/=/g,":"));
+ var WFidRow = workflowInfo_objectRow["workflow_name"].replace(/ /g,"");
+
+      id = WFidRow+f;
+     $('<tr />',{id: 'row'+id, value: tasks[f][0]}).appendTo("#"+WFidRow+">tbody");
+     var row = $("#row"+id);
+     var checkBox = $('<td />', { class:'checkboxRow' }).appendTo(row);
+     $('<input />', { class:'taskDone', type: 'checkbox', id: id, value: tasks[f][1] }).appendTo(checkBox);
+     if (tasks[f][3]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
+     
+     var taskdescrip = $('<td />', { class:'taskdescrip' }).appendTo(row);
+     $('<input />', { class:'taskDesc taskdescriptions', 'for': id, type: 'text',value: tasks[f][1] }).appendTo(taskdescrip);
+    
+     var usernameResp = $('<td />', { class:'usernameResp' }).appendTo(row);
+     $('<input />', { id: 'taskResps'+id, class:'taskResps', type: 'text', value: tasks[f][2] }).appendTo(usernameResp);
+     
+     $('<td />',{ id: 'username'+id, class:'username', html:tasks[f][3]}).appendTo(row);
+     }
+
+ }
 
 function returnHome() {
 
@@ -241,15 +299,15 @@ function checklist() {
  
  //adds username next to task when checkbox checked , or removes when unchecked
  
-$( "#output" ).on( "click", "input.taskDone", function( event ) {
+$( "#output" ).on( "click", "input.taskDone", addUsername);
 
-   
+function addUsername () {
 
- var selector = $(this).parent().nextAll(".username"); //finds username element in line with clicked input
+   console.log('clicked');
+var $this = $(this);
+ var selector = $this.parent().nextAll(".username"); //finds username element in line with clicked input
  
- var checkSelected = $(this).prop('checked');
-
-if (checkSelected) { //if task checked add username of active user to end of task desc
+if ($this.prop('checked')) { //if task checked add username of active user to end of task desc
  
  google.script.run
             .withSuccessHandler(function(user) {
@@ -265,7 +323,7 @@ if (checkSelected) { //if task checked add username of active user to end of tas
           
  else { selector.empty();   }    //if unchecked, removes username  
  
-});
+}
  
 // archives student by adding '*' to sheet name
 
