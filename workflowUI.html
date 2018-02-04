@@ -90,13 +90,27 @@
 
 <!-- task list -->
   <div class="page" id="page2"> 
-     <br>
+  <br>
+  
+  <div class="demo-card-square mdl-card mdl-shadow--2dp work template" id="workflowCard_template">
+  <div class="mdl-card__title mdl-card--expand "></div>
+  <div class="mdl-card__supporting-text cardText"></div>
+    <div class="mdl-card__actions mdl-card--border">
+    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect viewTasksButton">View Tasks</a>
+    </div>
+  </div>
+  
+  <div id="cards"></div>
+
+  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for tasks...">
+  <br>
+  
      <h5><span id="studentName"></span></h5>
      <h6><span id="yearGroup"></span>&nbsp;&nbsp;<span id="enrollmentDate"></span></h6> 
      <div id="workFlow_info"></div>
      <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp taskTable" id = "taskTableTemplate">
-      <thead><tr><th class="taskDone" class="mdl-data-table__cell--non-numeric">&nbsp;&nbsp;</th><th class="taskDesc" class="mdl-data-table__cell--non-numeric">Task</th><th class="taskResp" class="mdl-data-table__cell--non-numeric">Responsibility</th><th class="taskResp" class="mdl-data-table__cell--non-numeric">Completed by</th></tr></thead>
-      <tbody></tbody>
+      <thead><tr><th class="taskDesc" class="mdl-data-table__cell--non-numeric">Task</th><th class="taskResp" class="mdl-data-table__cell--non-numeric">Responsibility</th><th class="taskResp" class="mdl-data-table__cell--non-numeric">Completed by</th></tr></thead>
+      <tbody id="output"></tbody>
      </table>
     
   </div>
@@ -226,6 +240,14 @@
      
     </div>
   </dialog>
+  
+  <dialog class="mdl-dialog" id="tasklistdialogue">
+   <div class="mdl-dialog__title">Workflow Tasks</div>
+    <div class="mdl-dialog__content">
+      <i type="button" class="close material-icons">close</i>
+    lots of tasks!
+    </div>
+   </dialog>
   
   
   <?!= HtmlService.createHtmlOutputFromFile('workflowDialogue_JS').getContent(); ?> 

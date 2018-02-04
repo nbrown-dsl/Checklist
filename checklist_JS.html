@@ -4,6 +4,27 @@
    /**
    * Run initializations on load.
    */
+
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.maxHeight){
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    } 
+  });
+}
+
+ 
+ 
+ 
+ 
+ 
  getWorkFlowTypes();    
  
 
@@ -91,23 +112,9 @@ function addUser() {
 google.script.run
             .withSuccessHandler(function(formData) {
             
-            console.log(formData);
-            // Respond to success conditions here.
-           //generates form form workflow spreadsheet header data
-//     for (var h=0; h<formData.length; h++) {
-//     
-//              $('#workflowForm').append('<p class="inputDesc">'+formData[h].description+'</p>' );
-//  
-//            for (var i=0; i<formData[h].dataList.length; i++) {
-//              $('#workflowForm').append('<input name='+formData[h].id+' type='+formData[h].dataType+'>'+formData[h].dataList[i]+'<br>');
-//              }
-//             $('#workflowForm').append('<br>'); 
-             
-//             }
              $('.studentForm').empty();
              $('#page3').show(1000);
-              
-            
+                        
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
@@ -173,9 +180,9 @@ google.script.run
 
 }
 
-//NEW creates list of all tasks
+//NEW creates list of all tasks in table for each workflow
 
-function allTasksList(tasks) {
+function XallTasksList(tasks) {
 
 var taskNumber = tasks.length;
    var id="";
@@ -265,6 +272,104 @@ function checklist() {
           })
             .tasks(student); 
   
+ }
+ 
+ //NEW NEW all tasks tables
+ //tasks all in one table
+  function XallTasksList(tasks) {
+  
+   var container = $('#output');
+   var taskNumber = tasks.length;
+   var id="";
+
+ for (var f=2; f<taskNumber ; f++) {
+
+  id = 'tasks'+f;
+     $('<tr />',{id: 'row'+f}).appendTo(container);
+     var row = $("#row"+f);
+     var checkBox = $('<td />', { class:'checkboxRow' }).appendTo(row);
+     $('<input />', { class:'taskDone', type: 'checkbox', id: id, value: tasks[f][1] }).appendTo(checkBox);
+     if (tasks[f][3]) {$('#'+id).prop('checked',true);}; // if task has a username in next cell checked as done
+     
+     var taskdescrip = $('<td />', { class:'taskdescrip' }).appendTo(row);
+     $('<input />', { class:'taskDesc taskdescriptions', 'for': id, type: 'text',value: tasks[f][1] }).appendTo(taskdescrip);
+    
+     var usernameResp = $('<td />', { class:'usernameResp' }).appendTo(row);
+     $('<input />', { id: 'taskResps'+f, class:'taskResps', type: 'text', value: tasks[f][2] }).appendTo(usernameResp);
+     
+     $('<td />',{ id: 'username'+f, class:'username', html:tasks[f][3]}).appendTo(row);
+     }
+
+ }
+ 
+ //NEW NEW filter all tasks table
+ 
+ function myFunction() {
+  // Declare variables 
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("output");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    } 
+  }
+}
+
+//SUPER NEW cards
+//card for each workflow
+
+function allTasksList(tasks) {
+
+var taskNumber = tasks.length;
+   var id="";
+ $('#workFlow_info').empty();
+
+//create table for each workflow and assign workflowname as table id
+ var firstColumn = tasks.map(function(e) { return e[0] });
+ var unique = firstColumn.filter( function (value, index, self) { 
+               return self.indexOf(value) === index;});
+
+unique.map(function(e,i) {
+
+var workflowInfo_object = JSON.parse(e.replace(/=/g,":"));
+var WFid = workflowInfo_object["workflow_name"].replace(/ /g,"");
+
+$('#workflowCard_template').clone().attr({
+  id: WFid
+}).appendTo('#cards');
+
+var table = "#"+WFid;
+ $(table).removeClass('template');
+ $(table + ' .mdl-card__title').css('background-color', '#'+Math.floor(Math.random()*16777215).toString(16));
+ $(table+' .mdl-card__title').html(workflowInfo_object["workflow_name"]);
+ $(table + ' .viewTasksButton').click(function() {
+      var dialogTasks = document.querySelector('#tasklistdialogue');
+      dialogTasks.showModal();
+    });
+
+ $(table +'>.cardText').empty();
+ var i;
+ for (i in workflowInfo_object) {
+ if (i !='workflow_type' && i !='workflow_name' && i !='tasks_sheetName') {
+ $('<p />').html(i+":"+workflowInfo_object[i]).appendTo(table +'>.cardText');
+ }
+ }
+
+});
+
+
+
  }
  
  function createCheckboxes(tasks) {

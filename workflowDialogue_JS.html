@@ -1,7 +1,17 @@
 <script>
 
+    var dialogTasks = document.querySelector('#tasklistdialogue');
+    var showModalButtonsTasks = document.querySelector('.viewTasksButton');
+    if (! dialogTasks.showModal) {
+      dialogPolyfill.registerDialog(dialogTasks);
+    }
+    
+     dialogTasks.querySelector('.close').addEventListener('click', function() {
+      dialogTasks.close(); 
+    });
+
     var dialog = document.querySelector('dialog');
-    var showModalButton = document.querySelector('.show-modal');
+    var showModalButton = document.querySelector('#newWorkflow');
     if (! dialog.showModal) {
       dialogPolyfill.registerDialog(dialog);
     }
@@ -19,7 +29,7 @@
       dialog.showModal();
     });
     dialog.querySelector('.close').addEventListener('click', function() {
-      dialog.close();
+      dialog.close(); 
     });
     dialog.querySelector('.next').addEventListener('click', function() {
     
