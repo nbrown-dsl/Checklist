@@ -37,5 +37,37 @@ function allTasks() {
   
 }
 
+//sets spreadsheet values as submitted from workflow tasks dialogue
+
+function tasksToSpreadsheet(tasks,usernames,responsibility,workflowName) {
+  
+   var ss = SpreadsheetApp.getActive();
+   var sheet = ss.getSheetByName("#workflows");
+   var rowNumber = tasks.length;
+  
+   var newData = [];
+  
+  for (var r=0; r<rowNumber; r++) {
+  
+    newData[r]= new Array(3);
+   
+    newData[r][0] = tasks[r];
+    newData[r][2] = usernames[r];
+    newData[r][1] = responsibility[r];
+    
+  }
+  
+  var data = sheet.getDataRange().getValues();
+  
+  var row = 0;
+  while (data[row][0].indexOf(workflowName)<0 && row<data.length) { row++ };
+  
+  var range = sheet.getRange(row+1,2,rowNumber,3);
+      range.setValues(newData);
+  
+  return workflowName+" updated";
+    
+}
+
 
 

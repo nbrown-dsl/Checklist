@@ -21,8 +21,8 @@ for (i = 0; i < acc.length; i++) {
 }
 
  
- 
- 
+  var saveButtonTasks = document.querySelector('.updateWorkFlow');
+      saveButtonTasks.addEventListener('click', saveWorkflow);
  
  
  getWorkFlowTypes();    
@@ -196,17 +196,18 @@ var taskNumber = tasks.length;
 unique.map(function(e,i) {
 
 var workflowInfo_object = JSON.parse(e.replace(/=/g,":"));
-var WFid = workflowInfo_object["workflow_name"].replace(/ /g,"");
+var WFid = workflowInfo_object["workflow_name"].replace(/ /g,"")+"_table";
 
 $('#taskTableTemplate').clone().attr({
   id: WFid
-}).appendTo('#page2');
+}).appendTo('#tasklistdialogue_content');
 
- var i;
- for (i in workflowInfo_object) {
- var table = "#"+WFid;
- $('<h6 />').html(workflowInfo_object[i]).insertBefore(table);
- }
+//shows workflow info before each table
+// var i;
+// for (i in workflowInfo_object) {
+// var table = "#"+WFid;
+// $('<p />').html(workflowInfo_object[i]).insertBefore(table);
+// }
 
 });
 
@@ -218,7 +219,7 @@ $('#taskTableTemplate').clone().attr({
  for (var f=1; f<taskNumber ; f++) {
  
  var workflowInfo_objectRow = JSON.parse(tasks[f][0].replace(/=/g,":"));
- var WFidRow = workflowInfo_objectRow["workflow_name"].replace(/ /g,"");
+ var WFidRow = workflowInfo_objectRow["workflow_name"].replace(/ /g,"")+"_table";
 
       id = WFidRow+f;
      $('<tr />',{id: 'row'+id, value: tasks[f][0]}).appendTo("#"+WFidRow+">tbody");
@@ -276,7 +277,7 @@ function checklist() {
  
  //NEW NEW all tasks tables
  //tasks all in one table
-  function XallTasksList(tasks) {
+  function XXallTasksList(tasks) {
   
    var container = $('#output');
    var taskNumber = tasks.length;
@@ -335,7 +336,7 @@ var taskNumber = tasks.length;
    var id="";
  $('#workFlow_info').empty();
 
-//create table for each workflow and assign workflowname as table id
+//create card for each workflow and assign workflowname as card id
  var firstColumn = tasks.map(function(e) { return e[0] });
  var unique = firstColumn.filter( function (value, index, self) { 
                return self.indexOf(value) === index;});
@@ -349,28 +350,83 @@ $('#workflowCard_template').clone().attr({
   id: WFid
 }).appendTo('#cards');
 
-var table = "#"+WFid;
- $(table).removeClass('template');
- $(table + ' .mdl-card__title').css('background-color', '#'+Math.floor(Math.random()*16777215).toString(16));
- $(table+' .mdl-card__title').html(workflowInfo_object["workflow_name"]);
- $(table + ' .viewTasksButton').click(function() {
+var card = "#"+WFid;
+ $(card).removeClass('template');
+ $(card + ' .mdl-card__title').css('background-color', '#'+Math.floor(Math.random()*16777215).toString(16));
+ $(card +' .mdl-card__title').html(workflowInfo_object["workflow_name"]);
+ $(card + ' .viewTasksButton').attr("title",card).click(function() 
+ 
+ //hides all other task lists and then shows dialogue
+    {
       var dialogTasks = document.querySelector('#tasklistdialogue');
+      
+      var WFid = $(this).attr("title");
+      $('.taskTable').hide();
+      $(WFid+"_table").show();
+      $("#workflowtasks_title").html("Workflow Tasks for "+workflowInfo_object["workflow_name"]).attr('title',workflowInfo_object["workflow_name"]);
       dialogTasks.showModal();
     });
 
- $(table +'>.cardText').empty();
+ $(card +'>.cardText').empty();
  var i;
  for (i in workflowInfo_object) {
  if (i !='workflow_type' && i !='workflow_name' && i !='tasks_sheetName') {
- $('<p />').html(i+":"+workflowInfo_object[i]).appendTo(table +'>.cardText');
+ $('<p />').html(i+":"+workflowInfo_object[i]).appendTo(card +'>.cardText');
  }
  }
 
 });
 
-
+//populates dialogtask box with tasks tables
+XallTasksList(tasks)
 
  }
+ 
+//saves dialogue task list to spreadsheet and sends email of updated task list
+
+function saveWorkflow() {
+
+var table = $('.taskTable:visible')[0];
+var tasks =[];
+$('.taskdescriptions:visible').each(function(index, obj)
+{
+  tasks.push($(this).val());
+});
+
+ var usernames =[];
+$('.username:visible').each(function(index, obj)
+{
+  usernames.push($(this).text());
+});
+
+ var responsibility = [];
+$('.taskResps:visible').each(function(index, obj)
+{
+  responsibility.push($(this).val());
+});
+
+var workflowName = $("#workflowtasks_title").attr('title');
+
+ google.script.run
+            .withSuccessHandler(function(success) {
+            // Respond to success conditions here.
+             $('#update').prop( "disabled", false );
+             $('#spinner').hide();
+             var dialogTasks = document.querySelector('#tasklistdialogue');
+             dialogTasks.close();
+             confirm(success);
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+             $('#update').prop( "disabled", false );
+             $('#spinner').hide();
+             $('#updateResponse').show();
+             $('#updateResponse').html(msg);
+          })
+        .tasksToSpreadsheet(tasks,usernames,responsibility,workflowName);
+    }
+
+ 
  
  function createCheckboxes(tasks) {
  

@@ -6,9 +6,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-orange.min.css" />
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-red.min.css" />
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        
     <?!= include('style'); ?>
      <?!= include('workflowDialogue_style'); ?>
   </head>
@@ -107,13 +107,13 @@
   
      <h5><span id="studentName"></span></h5>
      <h6><span id="yearGroup"></span>&nbsp;&nbsp;<span id="enrollmentDate"></span></h6> 
-     <div id="workFlow_info"></div>
+     <div class="tableContainer" id="workFlow_info"></div>
      <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp taskTable" id = "taskTableTemplate">
       <thead><tr><th class="taskDesc" class="mdl-data-table__cell--non-numeric">Task</th><th class="taskResp" class="mdl-data-table__cell--non-numeric">Responsibility</th><th class="taskResp" class="mdl-data-table__cell--non-numeric">Completed by</th></tr></thead>
       <tbody id="output"></tbody>
      </table>
     
-  </div>
+     </div>
   
   
 <!-- adding new student or leaver form -->
@@ -236,16 +236,16 @@
     <div class="mdl-dialog__actions mdl-dialog__actions--full-width navBar">
      <button type="button" class="mdl-button back">Back</button>
       <button type="button" class="mdl-button next">Next</button>
-       <button type="button" class="mdl-button createWorkFlow">Submit</button> 
+       <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent createWorkFlow">Submit</button> 
      
     </div>
   </dialog>
   
   <dialog class="mdl-dialog" id="tasklistdialogue">
-   <div class="mdl-dialog__title">Workflow Tasks</div>
-    <div class="mdl-dialog__content">
+   <div class="mdl-dialog__title" id="workflowtasks_title"></div>
+    <div class="mdl-dialog__content" id="tasklistdialogue_content">
       <i type="button" class="close material-icons">close</i>
-    lots of tasks!
+    <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent updateWorkFlow">Submit</button>
     </div>
    </dialog>
   
